@@ -52,3 +52,12 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# JetBrains
+*.sln.DotSettings.user
+.idea/
+.config/
+
+# FileHub
+Api/Data/files/
+Api/Data/app.db
