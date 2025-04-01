@@ -10,7 +10,8 @@ public class FileService(
     IStorageService storageService,
     ITagService tagService,
     IFileRepository fileRepository,
-    ResponseFactory responseFactory
+    ResponseFactory responseFactory,
+    ILogger<FileService> logger
 ) : IFileService
 {
     public async Task<Result> AddFileAsync(UploadRequest fileUploadRequest, User user)
@@ -29,9 +30,11 @@ public class FileService(
         try
         {
             await storageService.SaveFileToPathAsync(file, storedFile.Path);
+            logger.LogInformation("File {FileName} saved at {Path}", file.FileName, storedFile.Path);
         }
         catch (Exception)
         {
+            logger.LogError("File {FileName} could not be saved at {Path}", file.FileName, storedFile.Path);
             return Result.Failure(Error.FileStorageError);
         }
 

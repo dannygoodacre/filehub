@@ -6,6 +6,7 @@ using Api.Repositories;
 using Api.Services;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace Api.Tests.Services;
@@ -33,7 +34,8 @@ public class FileServiceTests
             _storageService.Object,
             _tagService.Object,
             _fileRepository.Object,
-            responseFactory
+            responseFactory,
+            NullLogger<FileService>.Instance
         );
     }
 

@@ -13,7 +13,7 @@ namespace Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("files")]
-public class FileController(UserManager<User> userManager, IFileService fileService) : ControllerBase
+public class FileController(UserManager<User> userManager, IFileService fileService, ILogger<FileController> logger) : ControllerBase
 {
     /// <summary>
     /// Upload a file.
@@ -27,11 +27,24 @@ public class FileController(UserManager<User> userManager, IFileService fileServ
         var user = await GetUserAsync();
         if (user is null)
             return Unauthorized(Messages.NotLoggedIn);
-
+        
+        logger.LogInformation("File {FileName} upload requested by {UserName}", 
+            fileUploadRequest.File.FileName, user.UserName);
+        
         var result = await fileService.AddFileAsync(fileUploadRequest, user);
-        return result.IsSuccess
-            ? Ok(Messages.FileUploaded)
-            : CreateHttpErrorResponse(result.Error);
+
+        if (!result.IsSuccess)
+        {
+            logger.LogError("File {FileName} upload failed for {UserName} with error {Error}", 
+                fileUploadRequest.File.FileName, user.UserName, result.Error);
+            
+            return CreateHttpErrorResponse(result.Error);
+        }
+        
+        logger.LogInformation("File {FileName} uploaded successfully by {UserName}", 
+            fileUploadRequest.File.FileName, user.UserName);
+        
+        return Ok(Messages.FileUploaded);
     }
 
     /// <summary>

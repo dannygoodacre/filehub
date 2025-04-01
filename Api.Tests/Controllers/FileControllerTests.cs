@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.ObjectiveC;
 using System.Security.Claims;
 using Api.Controllers;
 using Api.Data.Entities;
@@ -9,8 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using Namotion.Reflection;
 
 namespace Api.Tests.Controllers;
 
@@ -38,7 +37,7 @@ public class FileControllerTests
         );
 
         _fileServiceMock = new Mock<IFileService>();
-        _controller = new FileController(_userManagerMock.Object, _fileServiceMock.Object);
+        _controller = new FileController(_userManagerMock.Object, _fileServiceMock.Object, NullLogger<FileController>.Instance);
 
         // Setup default authenticated user context
         var claims = new List<Claim> { new(ClaimTypes.Name, UserName) };
@@ -57,7 +56,9 @@ public class FileControllerTests
     public async Task UploadFileAsync_ReturnsExpectedResult(Error? internalError, int expectedStatusCode, string? expectedMessage)
     {
         // Arrange
-        var request = new UploadRequest { File = null!, Name = null! };
+        var file = new Mock<IFormFile>();
+        file.Setup(f => f.FileName).Returns("test");
+        var request = new UploadRequest { File = file.Object, Name = null! };
         
         _userManagerMock.Setup(x => x.FindByNameAsync(UserName)).ReturnsAsync(_user);
         _fileServiceMock
