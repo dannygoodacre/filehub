@@ -16,7 +16,9 @@ public class TagRepository(ApplicationDbContext context) : ITagRepository
         await context.Tags.AsNoTracking().ToListAsync();
 
     public async Task<IEnumerable<Tag>> GetTagsByNamesAsync(IEnumerable<string> tagNames) => 
-        await context.Tags.Where(t => tagNames.Contains(t.Name)).ToListAsync();
+        await context.Tags
+            .Where(t => tagNames.Contains(t.Name))
+            .ToListAsync();
 
     public Task<bool> TagExistsByNameAsync(string tagName) =>
         context.Tags.AnyAsync(t => t.Name == tagName);

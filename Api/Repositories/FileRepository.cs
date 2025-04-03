@@ -13,23 +13,23 @@ public class FileRepository(ApplicationDbContext context) : IFileRepository
     }
 
     public async Task<StoredFile?> GetByIdAsync(int id) =>
-        await context
-            .StoredFiles.AsNoTracking()
+        await context.StoredFiles
+            .AsNoTracking()
             .Include(sf => sf.Uploader)
             .Include(sf => sf.Tags)
             .FirstOrDefaultAsync(sf => sf.Id == id);
 
     public async Task<List<StoredFile>> GetAllByTagAsync(string tagName) =>
-        await context
-            .StoredFiles.AsNoTracking()
+        await context.StoredFiles
+            .AsNoTracking()
             .Include(sf => sf.Uploader)
             .Include(sf => sf.Tags)
             .Where(sf => sf.Tags.Any(t => t.Name == tagName))
             .ToListAsync();
 
     public async Task<List<StoredFile>> GetPaginatedFilesAsync(int page, int pageSize) =>
-        await context
-            .StoredFiles.AsNoTracking()
+        await context.StoredFiles
+            .AsNoTracking()
             .OrderBy(sf => sf.Id)
             .Skip(page * pageSize)
             .Take(pageSize)
