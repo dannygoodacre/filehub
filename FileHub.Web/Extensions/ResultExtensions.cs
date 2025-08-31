@@ -1,0 +1,30 @@
+using FileHub.Core.Common;
+
+namespace FileHub.Web.Extensions;
+
+internal static class ResultExtensions
+{
+    public static IResult ToHttpResponse(this Result result)
+        => result.Status switch
+            {
+                Status.Success => Results.Ok(),
+                Status.Failed => Results.InternalServerError(),
+                Status.Invalid => Results.BadRequest(result.ValidationState!.ToValidationProblemDetails()),
+                Status.NotFound => Results.NotFound(),
+                Status.Cancelled => Results.InternalServerError(),
+                Status.InternalError => Results.InternalServerError(),
+                _ => Results.InternalServerError()
+            };
+
+    public static IResult ToHttpResponse<T>(this Result<T> result)
+        => result.Status switch
+            {
+                Status.Success => Results.Ok(result.Value),
+                Status.Failed => Results.InternalServerError(),
+                Status.Invalid => Results.BadRequest(result.ValidationState!.ToValidationProblemDetails()),
+                Status.NotFound => Results.NotFound(),
+                Status.Cancelled => Results.InternalServerError(),
+                Status.InternalError => Results.InternalServerError(),
+                _ => Results.InternalServerError()
+            };
+}

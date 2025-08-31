@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <IsRoslynComponent>true</IsRoslynComponent>
+
+        <RootNamespace>FileHub.Tests.Analyzers</RootNamespace>
+        <AssemblyName>FileHub.Tests.Analyzers</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Remove="AnalyzerReleases.Unshipped.md" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+    </ItemGroup>
+
+</Project>

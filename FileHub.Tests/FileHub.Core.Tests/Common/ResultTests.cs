@@ -1,0 +1,316 @@
+using FileHub.Core.Common;
+
+namespace FileHub.Core.Tests.Common;
+
+[TestFixture]
+public class ResultTests : TestBase
+{
+    [Test]
+    public void Success()
+    {
+        // Act
+        var result = Result.Success();
+
+        // Assert
+        Assert.That(result.Status, Is.EqualTo(Status.Success));
+    }
+
+    [Test]
+    public void Failed()
+    {
+        // Act
+        var result = Result.Failed();
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(result.Status, Is.EqualTo(Status.Failed));
+            Assert.That(result.Error, Is.Null);
+        }
+    }
+
+    [Test]
+    public void FailedWithMessage()
+    {
+        // Arrange
+        const string message = "Test Message";
+
+        // Act
+        var result = Result.Failed(message);
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+
+            Assert.That(result.Status, Is.EqualTo(Status.Failed));
+            Assert.That(result.Error, Is.EqualTo(message));
+        }
+    }
+
+    [Test]
+    public void FailedWithException()
+    {
+        // Arrange
+        var exception = new Exception("Test Exception");
+
+        // Act
+        var result = Result.Failed(exception);
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(result.Status, Is.EqualTo(Status.Failed));
+            Assert.That(result.Exception, Is.EqualTo(exception));
+        }
+    }
+
+    [Test]
+    public void Invalid()
+    {
+        // Arrange
+        var validationState = new ValidationState();
+
+        const string property1 = "Test Property 1";
+        const string property2 = "Test Property 2";
+
+        const string error1 = "Test Error 1";
+        const string error2 = "Test Error 2";
+
+        validationState.AddError(property1, error1);
+        validationState.AddError(property2, error2);
+
+        // Act
+        var result = Result.Invalid(validationState);
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+
+            Assert.That(result.Status, Is.EqualTo(Status.Invalid));
+            Assert.That(result.ValidationState, Is.EqualTo(validationState));
+        }
+    }
+
+    [Test]
+    public void NotFound()
+    {
+        // Act
+        var result = Result.NotFound();
+
+        // Assert
+        Assert.That(result.Status, Is.EqualTo(Status.NotFound));
+    }
+
+    [Test]
+    public void Cancelled()
+    {
+        // Act
+        var result = Result.Cancelled();
+
+        // Assert
+        Assert.That(result.Status, Is.EqualTo(Status.Cancelled));
+    }
+
+    [Test]
+    public void InternalError()
+    {
+        // Act
+        var result = Result.InternalError();
+
+        // Assert
+        Assert.That(result.Status, Is.EqualTo(Status.InternalError));
+    }
+
+    [Test]
+    public void InternalErrorWithMessage()
+    {
+        // Arrange
+        const string message = "Test Message";
+
+        // Act
+        var result = Result.InternalError(message);
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+
+            Assert.That(result.Status, Is.EqualTo(Status.InternalError));
+            Assert.That(result.Error, Is.EqualTo(message));
+        }
+    }
+
+    [Test]
+    public void IsSuccess_WhenSuccessful_ReturnsTrue()
+    {
+        // Act
+        var result = Result.Success();
+
+        // Assert
+        Assert.That(result.IsSuccess, Is.True);
+    }
+
+    [Test]
+    public void IsSuccess_WhenUnsuccessful_ReturnsFalse()
+    {
+        // Act
+        var result = Result.Failed();
+
+        // Assert
+        Assert.That(result.IsSuccess, Is.False);
+    }
+
+    [Test]
+    public void IsSuccessWithValue_WhenSuccessful_ReturnsTrue()
+    {
+        // Act
+        var result = Result<int>.Success(123);
+
+        // Assert
+        Assert.That(result.IsSuccess, Is.True);
+    }
+
+    [Test]
+    public void IsSuccessWithValue_WhenUnsuccessful_ReturnsFalse()
+    {
+        // Act
+        var result = Result<int>.Failed();
+
+        // Assert
+        Assert.That(result.IsSuccess, Is.False);
+    }
+
+    [Test]
+    public void Success_WithValue()
+    {
+        // Arrange
+        const int value = 123;
+
+        // Act
+        var result = Result<int>.Success(value);
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(result.Status, Is.EqualTo(Status.Success));
+            Assert.That(result.Value, Is.EqualTo(value));
+        }
+    }
+
+    [Test]
+    public void Failed_WithValue()
+    {
+        // Act
+        var result = Result<int>.Failed();
+
+        // Assert
+        Assert.That(result.Status, Is.EqualTo(Status.Failed));
+    }
+
+    [Test]
+    public void FailedWithMessage_WithValue()
+    {
+        // Arrange
+        const string error = "Test Error";
+
+        // Act
+        var result = Result<int>.Failed(error);
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(result.Status, Is.EqualTo(Status.Failed));
+            Assert.That(result.Error, Is.EqualTo(error));
+        }
+    }
+
+    [Test]
+    public void FailedWithException_WithValue()
+    {
+        // Arrange
+        var exception = new Exception("Test Exception");
+
+        // Act
+        var result = Result<int>.Failed(exception);
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(result.Status, Is.EqualTo(Status.Failed));
+            Assert.That(result.Exception, Is.EqualTo(exception));
+        }
+    }
+
+    [Test]
+    public void Invalid_WithValue()
+    {
+        // Arrange
+        var validationState = new ValidationState();
+
+        const string property1 = "Test Property 1";
+        const string property2 = "Test Property 2";
+
+        const string error1 = "Test Error 1";
+        const string error2 = "Test Error 2";
+
+        validationState.AddError(property1, error1);
+        validationState.AddError(property2, error2);
+
+        // Act
+        var result = Result<int>.Invalid(validationState);
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+
+            Assert.That(result.Status, Is.EqualTo(Status.Invalid));
+            Assert.That(result.ValidationState, Is.EqualTo(validationState));
+        }
+    }
+
+    [Test]
+    public void NotFound_WithValue()
+    {
+        // Act
+        var result = Result<int>.NotFound();
+
+        // Assert
+        Assert.That(result.Status, Is.EqualTo(Status.NotFound));
+    }
+
+    [Test]
+    public void Cancelled_WithValue()
+    {
+        // Act
+        var result = Result<int>.Cancelled();
+
+        // Assert
+        Assert.That(result.Status, Is.EqualTo(Status.Cancelled));
+    }
+
+    [Test]
+    public void InternalError_WithValue()
+    {
+        // Act
+        var result = Result<int>.InternalError();
+
+        // Assert
+        Assert.That(result.Status, Is.EqualTo(Status.InternalError));
+    }
+
+    [Test]
+    public void InternalErrorWithMessage_WithValue()
+    {
+        // Arrange
+        const string message = "Test Message";
+
+        // Act
+        var result = Result<int>.InternalError(message);
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(result.Status, Is.EqualTo(Status.InternalError));
+            Assert.That(result.Error, Is.EqualTo(message));
+        }
+    }
+}

@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+html,
+body {
+    @apply bg-zinc-50;
+}
+
+.alert {
+    @apply relative rounded border px-4 py-3 text-center;
+}

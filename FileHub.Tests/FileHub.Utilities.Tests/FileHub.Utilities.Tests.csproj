@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>default</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <Publishable>false</Publishable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\FileHub.Utilities\FileHub.Utilities.csproj" />
+        <ProjectReference Include="..\FileHub.Tests.Analyzers\FileHub.Tests.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\FileHub.Tests.Common\FileHub.Tests.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="6.0.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+        <PackageReference Include="NUnit" Version="4.4.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="5.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="NUnit.Framework" />
+        <Using Include="FileHub.Tests.Common" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.Configuration">
+        <HintPath>..\..\..\..\.nuget\packages\microsoft.extensions.configuration\9.0.8\lib\net9.0\Microsoft.Extensions.Configuration.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
