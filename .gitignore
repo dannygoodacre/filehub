@@ -90,3 +90,8 @@ data/
 !.env.production.template
 .idea/
 FileHub.sln.DotSettings.user
+
+# Python
+__pycache__/
+.venv/
+.pytest_cache/

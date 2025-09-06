@@ -27,6 +27,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="FileHub.Data.Tests"/>
+        <InternalsVisibleTo Include="FileHub.Tests.Seeder"/>
     </ItemGroup>
 
 </Project>
