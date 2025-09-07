@@ -29,6 +29,14 @@ public interface IFileRepository
     /// <returns>A <see cref="List{T}"/> of <see cref="StoredFile"/> instances.</returns>
     Task<List<StoredFile>> GetAllByTagAsync(string tagName, CancellationToken cancellationToken = default);
 
+
+    /// <summary>
+    /// Retrieve the total number of files.
+    /// </summary>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while performing the operation.</param>
+    /// <returns>The total number of files.</returns>
+    Task<int> GetFilesCountAsync(CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Retrieve a subset of files using pagination.
     /// </summary>
