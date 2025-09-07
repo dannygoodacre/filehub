@@ -23,6 +23,7 @@
     <ItemGroup>
         <InternalsVisibleTo Include="FileHub.Web.Tests" />
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+        <InternalsVisibleTo Include="FileHub.API.Tests" />
     </ItemGroup>
 
 </Project>
