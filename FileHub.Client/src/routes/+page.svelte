@@ -4,7 +4,7 @@
     import FileViewGrid from '$lib/components/FileViewGrid.svelte';
     import { fileService } from '$lib/services/fileService';
     import type { FileMetaData } from '$lib/models/file';
-    import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from 'svelte-feather-icons';
+    import { ChevronLeftIcon, ChevronRightIcon } from 'svelte-feather-icons';
 
     onMount(() => {
         load(1, pageSize);
