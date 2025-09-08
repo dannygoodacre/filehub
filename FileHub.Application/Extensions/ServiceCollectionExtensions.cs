@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGetFileContent, GetFileContent>();
         services.AddScoped<IGetFileMetadata, GetFileMetadata>();
         services.AddScoped<IGetPaginatedFileMetadata, GetPaginatedFilesMetadata>();
+        services.AddScoped<IGetFilePageCount, GetFilePageCount>();
 
         return services;
     }

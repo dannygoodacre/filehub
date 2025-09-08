@@ -18,7 +18,8 @@ public class FileController(ICurrentUserService currentUserService,
                             IAddFile addFile,
                             IGetFileContent getFileContent,
                             IGetFileMetadata getFileMetadata,
-                            IGetPaginatedFileMetadata getPaginatedFileMetadata) : ControllerBase
+                            IGetPaginatedFileMetadata getPaginatedFileMetadata,
+                            IGetFilePageCount getFilePageCount) : ControllerBase
 {
     /// <summary>
     /// Upload a file.
@@ -64,6 +65,17 @@ public class FileController(ICurrentUserService currentUserService,
     public async Task<IResult> GetFileMetadataAsync(string id, CancellationToken cancellationToken = default)
     {
         var result = await getFileMetadata.ExecuteAsync(id, cancellationToken);
+
+        return result.ToHttpResponse();
+    }
+    
+    /// <summary>
+    /// Fetch the number of pages of files for the given page size.
+    /// </summary>
+    [HttpGet("pagecount")]
+    public async Task<IResult> GetFilePageCountAsync([FromQuery] int pageSize, CancellationToken cancellationToken = default)
+    {
+        var result = await getFilePageCount.ExecuteAsync(pageSize, cancellationToken);
 
         return result.ToHttpResponse();
     }

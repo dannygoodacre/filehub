@@ -14,6 +14,19 @@ class FileService {
             return null;
         }
     }
+    
+    public async getPageCount(pageSize: number) : Promise<number | null> {
+        try {
+            const response = await fetch(`${API_URL}/files/pagecount?pageSize=${pageSize}`, {
+                credentials: 'include' as RequestCredentials,
+                method: 'GET'
+            });
+            
+            return response.ok ? await response.json() : null;
+        } catch {
+            return null;
+        }
+    }
 
     public async getPaginatedFiles(page: number, count: number) : Promise<FileMetaData[] | null> {
         try {

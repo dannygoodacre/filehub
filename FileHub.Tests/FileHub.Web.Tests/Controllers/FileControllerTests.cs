@@ -23,6 +23,8 @@ public class FileControllerTests : TestBase
     private Mock<IGetFileMetadata> _mockGetFileMetadata;
 
     private Mock<IGetPaginatedFileMetadata> _mockGetPaginatedFileMetadata;
+    
+    private Mock<IGetFilePageCount> _mockGetFilePageCount;
 
     private FileController _controller;
 
@@ -62,11 +64,17 @@ public class FileControllerTests : TestBase
 
     private int _testPage;
 
+    private int _testPageSize;
+
     private int _testCount;
+
+    private int _testFilePageCount;
 
     private List<FileMetadata> _testFileMetadataList;
 
     private Result<List<FileMetadata>> _testGetPaginatedFileMetadataResult;
+
+    private Result<int> _testGetFilePageCountResult;
 
     [SetUp]
     public void SetUp()
@@ -76,12 +84,14 @@ public class FileControllerTests : TestBase
         _mockGetFile = new Mock<IGetFileContent>(MockBehavior.Strict);
         _mockGetFileMetadata = new Mock<IGetFileMetadata>(MockBehavior.Strict);
         _mockGetPaginatedFileMetadata = new Mock<IGetPaginatedFileMetadata>(MockBehavior.Strict);
+        _mockGetFilePageCount = new Mock<IGetFilePageCount>(MockBehavior.Strict);
 
         _controller = new FileController(_mockCurrentUserService.Object,
                                          _mockAddFile.Object,
                                          _mockGetFile.Object,
                                          _mockGetFileMetadata.Object,
-                                         _mockGetPaginatedFileMetadata.Object);
+                                         _mockGetPaginatedFileMetadata.Object,
+                                         _mockGetFilePageCount.Object);
 
         _testCancellationToken = CancellationToken.None;
 
@@ -162,9 +172,15 @@ public class FileControllerTests : TestBase
 
         _testPage = 1;
 
+        _testPageSize = 5;
+
         _testCount = 2;
 
         _testGetPaginatedFileMetadataResult = Result<List<FileMetadata>>.Success(_testFileMetadataList);
+
+        _testFilePageCount = 24;
+
+        _testGetFilePageCountResult = Result<int>.Success(_testFilePageCount);
     }
 
     [Test]
@@ -275,6 +291,34 @@ public class FileControllerTests : TestBase
     }
 
     [Test]
+    public async Task GetFilePageCountAsync_WhenGetFilePageCountFails_ShouldReturnInternalServerError()
+    {
+        // Arrange
+        _testGetFilePageCountResult = Result<int>.Failed();
+
+        Setup_GetFilePageCount_ExecuteAsync();
+
+        // Act
+        var result = await _controller.GetFilePageCountAsync(_testPageSize, _testCancellationToken);
+
+        // Assert
+        Assert.That(result, Is.EqualTo(Results.InternalServerError()));
+    }
+
+    [Test]
+    public async Task GetFilePageCountAsync_WhenGetFilePageCountSucceeds_ShouldReturnPageCount()
+    {
+        // Arrange
+        Setup_GetFilePageCount_ExecuteAsync();
+
+        // Act
+        var result = await _controller.GetFilePageCountAsync(_testPageSize, _testCancellationToken);
+
+        // Assert
+        Assert.That(result, Is.EqualTo(Results.Ok(_testFilePageCount)).UsingPropertiesComparer());
+    }
+
+    [Test]
     public async Task GetPaginatedFilesMetadataAsync_WhenGetFilesFails_ShouldReturnInternalServerError()
     {
         // Arrange
@@ -342,6 +386,17 @@ public class FileControllerTests : TestBase
                 It.Is<string>(y => y == _testFileId),
                 It.Is<CancellationToken>(y => y == _testCancellationToken)))
             .ReturnsAsync(_testGetFileMetadataResult)
+            .Verifiable(Times.Exactly(times));
+    }
+
+    private void Setup_GetFilePageCount_ExecuteAsync(int times = 1)
+    {
+        _mockGetFilePageCount
+            .Setup(x => x.ExecuteAsync(
+                It.Is<int>(y => y == _testPageSize),
+                It.Is<CancellationToken>(y => y == _testCancellationToken)
+            ))
+            .ReturnsAsync(_testGetFilePageCountResult)
             .Verifiable(Times.Exactly(times));
     }
 

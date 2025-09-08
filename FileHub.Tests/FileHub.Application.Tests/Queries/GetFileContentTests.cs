@@ -14,7 +14,6 @@ public class GetFileContentTests : TestBase
 {
     private const string Name = "Get File Content";
 
-    // TODO: Can I remove the null! here?
     private Mock<ILogger<GetFileContent>> _mockLogger = null!;
 
     private Mock<IFileRepository> _mockRepository = null!;

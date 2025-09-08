@@ -163,6 +163,30 @@ public class FileRepositoryTests : TestBase
     }
 
     [Test]
+    public async Task GetFilesCountAsync_WhenNoFiles_ShouldZero()
+    {
+        // Arrange
+        _context.RemoveRange(_storedFiles);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _repository.GetFilesCountAsync();
+
+        // Assert
+        Assert.That(result, Is.Zero);
+    }
+
+    [Test]
+    public async Task GetFilesCountAsync_WhenFiles_ShouldReturnCount()
+    {
+        // Act
+        var result = await _repository.GetFilesCountAsync();
+
+        // Assert
+        Assert.That(result, Is.EqualTo(_storedFiles.Count));
+    }
+
+    [Test]
     public async Task GetPaginatedFilesAsync_WhenPageSizeIsZero_ShouldReturnEmptyCollection()
     {
         // Arrange

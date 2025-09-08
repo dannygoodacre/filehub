@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { FileMetaData } from '$lib/models/file';
     import { FileIcon } from 'svelte-feather-icons';
+    import FileThumbnail from './FileThumbnail.svelte';
 
     let { fileMetaData }: { fileMetaData: FileMetaData } = $props();
 
@@ -23,17 +24,7 @@
 <div class="m-2 w-full max-w-sm overflow-hidden rounded shadow-lg">
 
     <div class="w-full aspect-[4/3] overflow-hidden">
-        <a href={fileMetaData.accessLocation} target="_blank" rel="noopener noreferrer">
-            {#if isImage}
-                <img class="block h-full w-full object-cover" src={src} alt={fileMetaData.name} onerror={retry}/>
-            {:else}
-                <div class="flex h-full w-full items-center justify-center bg-zinc-100">
-                    <div class="flex h-1/3 w-auto items-center justify-center">
-                        <FileIcon size="100%" class="h-full w-full text-zinc-600" />
-                    </div>
-                </div>
-            {/if}
-        </a>
+        <FileThumbnail {fileMetaData} />
     </div>
 
     <div class="px-4 pt-2">

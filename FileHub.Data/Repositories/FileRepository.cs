@@ -10,20 +10,20 @@ internal class FileRepository(ApplicationContext context) : IFileRepository
 
     public async Task<StoredFile?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         => await context.StoredFiles
-            .AsNoTracking()
             .Include(x => x.Tags)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
     public async Task<List<StoredFile>> GetAllByTagAsync(string tagName, CancellationToken cancellationToken = default)
         => await context.StoredFiles
-            .AsNoTracking()
             .Include(x => x.Tags)
             .Where(x => x.Tags.Any(t => t.Name == tagName))
             .ToListAsync(cancellationToken: cancellationToken);
 
+    public async Task<int> GetFilesCountAsync(CancellationToken cancellationToken = default)
+        => await context.StoredFiles.CountAsync(cancellationToken);
+
     public async Task<List<StoredFile>> GetPaginatedFilesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         => await context.StoredFiles
-            .AsNoTracking()
             .OrderBy(x => x.Id)
             .Skip(pageNumber * pageSize)
             .Take(pageSize)
