@@ -25,7 +25,7 @@ internal sealed class GetFilePageCount(ILogger<GetFilePageCount> logger,
 
         var pageCount = fileCount / query.PageSize + 1;
 
-        logger.LogInformation("Query '{Name}' completed with total file count '{FileCount}', total page count '{PageCount}', page size '{PageSize}'", Name, fileCount, pageCount, query.PageSize);
+        logger.LogInformation("Query '{Name}' completed with total file count '{FileCount}', total page count '{PageCount}', page size '{PageSize}'.", Name, fileCount, pageCount, query.PageSize);
 
         return Result<int>.Success(pageCount);
     }
