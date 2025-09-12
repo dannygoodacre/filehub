@@ -13,7 +13,7 @@ internal sealed class GetFilePageCount(ILogger<GetFilePageCount> logger,
     {
         if (query.PageSize <= 0)
         {
-            validationState.AddError(nameof(query.PageSize), "Must be greater than 0.");            
+            validationState.AddError(nameof(query.PageSize), "Must be greater than 0.");
         }
     }
 
@@ -24,8 +24,6 @@ internal sealed class GetFilePageCount(ILogger<GetFilePageCount> logger,
         var fileCount = await repository.GetFilesCountAsync(cancellationToken);
 
         var pageCount = fileCount / query.PageSize + 1;
-
-        logger.LogInformation("Query '{Name}' completed with total file count '{FileCount}', total page count '{PageCount}', page size '{PageSize}'.", Name, fileCount, pageCount, query.PageSize);
 
         return Result<int>.Success(pageCount);
     }

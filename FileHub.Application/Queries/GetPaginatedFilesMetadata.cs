@@ -42,8 +42,6 @@ internal sealed class GetPaginatedFilesMetadata(ILogger<GetPaginatedFilesMetadat
             return file.ToMetadata(externalId, accessLocation);
         }).ToList();
 
-        logger.LogInformation("Query '{Name}' completed with page number '{PageNumber}', page count '{PageCount}'.", Name, query.PageNumber, query.PageSize);
-
         return Result<List<FileMetadata>>.Success(metadata);
     }
 

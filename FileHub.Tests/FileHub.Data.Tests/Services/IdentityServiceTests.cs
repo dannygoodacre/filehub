@@ -71,27 +71,29 @@ public class IdentityServiceTests : TestBase
     }
 
     [Test]
-    public async Task RegisterAsync_WhenUserCreationFails_ShouldReturnFailure()
+    public async Task RegisterAsync_WhenUserCreationFails_ShouldReturnDomainError()
     {
         // Arrange
         Setup_UserStore_SetUserNameAsync();
+
+        var identityError = new IdentityError
+        {
+            Code = "Test Code",
+            Description = "Test Description"
+        };
 
         _userManagerMock
             .Setup(x => x.CreateAsync(
                 It.IsAny<ApplicationUser>(),
                 It.Is<string>(y => y == TestPassword)))
-            .ReturnsAsync(IdentityResult.Failed())
+            .ReturnsAsync(IdentityResult.Failed(identityError))
             .Verifiable(Times.Once);
 
         // Act
         var result = await _service.RegisterAsync(TestUsername, TestPassword);
 
         // Assert
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.Error, Is.EqualTo("Registration failed."));
-        }
+        AssertDomainError(result, "Failed : Test Code");
     }
 
     [Test]
@@ -163,7 +165,7 @@ public class IdentityServiceTests : TestBase
     }
 
     [Test]
-    public async Task LoginAsync_WhenUserAccountConfirmedAndNeededAndSignInFailed_ShouldReturnLoginFailed()
+    public async Task LoginAsync_WhenUserAccountConfirmedAndNeededAndSignInFailed_ShouldReturnDomainError()
     {
         // Arrange
         Setup_UserManager_FindByNameAsync();
@@ -185,11 +187,7 @@ public class IdentityServiceTests : TestBase
         var result = await _service.LoginAsync(TestUsername, TestPassword);
 
         // Assert
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.Error, Is.EqualTo("Login failed."));
-        }
+        AssertDomainError(result, "Failed");
     }
 
     [Test]
@@ -285,7 +283,7 @@ public class IdentityServiceTests : TestBase
     [TestCase(null!)]
     [TestCase("")]
     [TestCase(" ")]
-    public async Task ChangePasswordAsync_WhenOldPasswordIsEmpty_ShouldReturnUserNotFound(string oldPassword)
+    public async Task ChangePasswordAsync_WhenOldPasswordIsEmpty_ShouldReturnInvalid(string oldPassword)
     {
         // Arrange
         Setup_UserManager_FindByIdAsync();
@@ -294,17 +292,13 @@ public class IdentityServiceTests : TestBase
         var result = await _service.ChangePasswordAsync(TestUserId, oldPassword, TestNewPassword);
 
         // Assert
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.Error, Is.EqualTo("Old password cannot be empty."));
-        }
+        AssertInvalid(result);
     }
 
     [TestCase(null!)]
     [TestCase("")]
     [TestCase(" ")]
-    public async Task ChangePasswordAsync_WhenNewPasswordIsEmpty_ShouldReturnUserNotFound(string newPassword)
+    public async Task ChangePasswordAsync_WhenNewPasswordIsEmpty_ShouldReturnInvalid(string newPassword)
     {
         // Arrange
         Setup_UserManager_FindByIdAsync();
@@ -313,36 +307,34 @@ public class IdentityServiceTests : TestBase
         var result = await _service.ChangePasswordAsync(TestUserId, TestOldPassword, newPassword);
 
         // Assert
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.Error, Is.EqualTo("New password cannot be empty."));
-        }
+        AssertInvalid(result);
     }
 
     [Test]
-    public async Task ChangePasswordAsync_WhenChangePasswordFails_ShouldReturnFailure()
+    public async Task ChangePasswordAsync_WhenChangePasswordFails_ShouldReturnDomainError()
     {
         // Arrange
         Setup_UserManager_FindByIdAsync();
+
+        var identityError = new IdentityError
+        {
+            Code = "Test Code",
+            Description = "Test Description"
+        };
 
         _userManagerMock
             .Setup(x => x.ChangePasswordAsync(
                 It.Is<ApplicationUser>(y => y == _testUser),
                 It.Is<string>(y => y == TestOldPassword),
                 It.Is<string>(y => y == TestNewPassword)))
-            .ReturnsAsync(IdentityResult.Failed())
+            .ReturnsAsync(IdentityResult.Failed(identityError))
             .Verifiable(Times.Once);
 
         // Act
         var result = await _service.ChangePasswordAsync(TestUserId, TestOldPassword, TestNewPassword);
 
         // Assert
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.Error, Is.EqualTo("Password change failed."));
-        }
+        AssertDomainError(result, "Failed : Test Code");
     }
 
     [Test]

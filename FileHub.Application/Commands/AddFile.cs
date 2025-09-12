@@ -59,7 +59,7 @@ internal sealed class AddFile(ILogger<AddFile> logger,
         {
             logger.LogError("Command '{Command}' could not determine the extension for File '{File}'.", Name, command.OriginalFileName);
 
-            return Result.Failed("Could not find file extension.");
+            return Result.DomainError("Could not find file extension.");
         }
 
         var storageResult = await storageService.SaveAsync(command.Content, extension, cancellationToken);
@@ -68,7 +68,7 @@ internal sealed class AddFile(ILogger<AddFile> logger,
         {
             logger.LogError("Command '{Command}' could not save File '{File}'.", Name, command.OriginalFileName);
 
-            return Result.Failed(storageResult.Error);
+            return Result.InternalError("Could not save file.");
         }
 
         List<Tag> tags;
@@ -124,8 +124,6 @@ internal sealed class AddFile(ILogger<AddFile> logger,
         {
             logger.LogError("Command '{Command}' wrote an unexpected number of entities to the database for File '{File}': expected '{Expected}', actual '{Actual}'.", Name, command.OriginalFileName, expectedChanges, actualChanges);
         }
-
-        logger.LogInformation("Command '{Command}' completed for File '{File}', Name '{Name}'.", Name, command.OriginalFileName, command.Name);
 
         return Result.Success();
     }

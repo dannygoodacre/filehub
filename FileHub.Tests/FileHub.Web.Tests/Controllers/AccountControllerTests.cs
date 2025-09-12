@@ -6,7 +6,6 @@ using FileHub.Web.Models;
 using FileHub.Web.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace FileHub.Web.Tests.Controllers;
@@ -94,7 +93,7 @@ public class AccountControllerTests : TestBase
             .Setup(x => x.RegisterAsync(
                 It.Is<string>(y => y == _testUsername),
                 It.Is<string>(y => y == _testPassword)))
-            .ReturnsAsync(Result.Failed())
+            .ReturnsAsync(Result.InternalError("Test Error"))
             .Verifiable(Times.Once);
 
         var loginRequest = new RegistrationRequest()
@@ -142,7 +141,7 @@ public class AccountControllerTests : TestBase
             .Setup(x => x.LoginAsync(
                 It.Is<string>(y => y == _testUsername),
                 It.Is<string>(y => y == _testPassword)))
-            .ReturnsAsync(Result.Failed())
+            .ReturnsAsync(Result.InternalError("Test Error"))
             .Verifiable(Times.Once);
 
         var loginRequest = new LoginRequest()
@@ -180,7 +179,7 @@ public class AccountControllerTests : TestBase
         // Arrange
         _mockIdentityService
             .Setup(x => x.LogoutAsync())
-            .ReturnsAsync(Result.Failed())
+            .ReturnsAsync(Result.InternalError("Test Error"))
             .Verifiable(Times.Once);
 
         // Act
@@ -217,7 +216,7 @@ public class AccountControllerTests : TestBase
     }
 
     [Test]
-    public async Task GetInfoAsync_WhenFailure_ShouldReturnNotFound()
+    public async Task GetInfoAsync_WhenFailure_ShouldReturnBadRequest()
     {
         // Arrange
         Setup_CurrentUserService_GetCurrentUserId();
@@ -225,14 +224,18 @@ public class AccountControllerTests : TestBase
         _mockIdentityService
             .Setup(x => x.GetUserInfoAsync(
                 It.Is<int>(y => y == _testUserId)))
-            .ReturnsAsync(Result<UserInfo>.Failed())
+            .ReturnsAsync(Result<UserInfo>.DomainError("Test domain error"))
             .Verifiable(Times.Once);
 
         // Act
         var result = await _controller.GetInfoAsync();
 
         // Assert
-        Assert.That(result, Is.EqualTo(Results.NotFound()));
+        Assert.That(result, Is.TypeOf<BadRequest<string>>());
+
+        var badResult = result as BadRequest<string>;
+
+        Assert.That(badResult?.Value, Is.EqualTo("Test domain error"));
     }
 
     [Test]
@@ -279,7 +282,7 @@ public class AccountControllerTests : TestBase
                 It.Is<int>(y => y == _testUserId),
                 It.Is<string>(y => y == _testOldPassword),
                 It.Is<string>(y => y == _testNewPassword)))
-            .ReturnsAsync(Result.Failed())
+            .ReturnsAsync(Result.InternalError("Test Error"))
             .Verifiable(Times.Once);
 
         // Act

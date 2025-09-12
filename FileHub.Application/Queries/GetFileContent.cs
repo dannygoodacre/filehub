@@ -49,14 +49,14 @@ internal sealed class GetFileContent(ILogger<GetFileContent> logger,
         {
             logger.LogError("Query '{Name}' could not read the file with ID '{FileId}' and Storage Key '{StorageKey}'.", Name, file.Id, file.StorageKey);
 
-            return Result<FileContent>.Failed(contentResult.Error);
+            return Result<FileContent>.InternalError("File content not found.");
         }
 
         if (contentResult.Value is null)
         {
             logger.LogError("Query '{Name}' could not read the file with ID '{FileId}' and Storage Key '{StorageKey}'.", Name, file.Id, file.StorageKey);
 
-            return Result<FileContent>.Failed("File content is empty.");
+            return Result<FileContent>.InternalError("File content is empty.");
         }
 
         var content = new FileContent
@@ -64,8 +64,6 @@ internal sealed class GetFileContent(ILogger<GetFileContent> logger,
             ContentType = file.ContentType,
             Content = contentResult.Value
         };
-
-        logger.LogInformation("Query '{Name}' completed for external ID '{ExternalFileId}', ID '{FileId}'.", Name, query.Id, file.Id);
 
         return Result<FileContent>.Success(content);
     }

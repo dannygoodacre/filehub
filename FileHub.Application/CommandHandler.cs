@@ -63,7 +63,7 @@ public abstract class CommandHandler<TCommand>(ILogger logger) where TCommand : 
         {
             logger.LogCritical(e, "Command '{Command}' failed with exception: {Exception}", Name, e.Message);
 
-            return Result.InternalError();
+            return Result.InternalError(e.Message);
         }
     }
 }

@@ -137,8 +137,6 @@ public class GetPaginatedFilesMetadataTests : TestBase
 
         Setup_Repository_GetPaginatedFilesAsync();
 
-        Setup_Logger_Completed();
-
         // Act
         var result = await Act();
 
@@ -162,8 +160,6 @@ public class GetPaginatedFilesMetadataTests : TestBase
         Setup_IdEncoderService_Encode();
 
         Setup_LocationService_GetFileAccessLocation();
-
-        Setup_Logger_Completed();
 
         // Act
         var result = await Act();
@@ -195,11 +191,6 @@ public class GetPaginatedFilesMetadataTests : TestBase
     private void Setup_Logger_Starting()
     {
         _mockLogger.Setup(LogLevel.Information, $"Query '{Name}' started with page number '{_requestPageNumber}', page count '{_requestPageSize}'.");
-    }
-
-    private void Setup_Logger_Completed()
-    {
-        _mockLogger.Setup(LogLevel.Information, $"Query '{Name}' completed with page number '{_requestPageNumber}', page count '{_requestPageSize}'.");
     }
 
     private void Setup_Repository_GetPaginatedFilesAsync(int times = 1)

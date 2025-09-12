@@ -3,7 +3,6 @@ using FileHub.Web.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FileHub.Web.Tests.Extensions;
 
@@ -24,19 +23,6 @@ public class ResultExtensionsTests : TestBase
     }
 
     [Test]
-    public void ToHttpResponse_WhenFailed_ShouldReturnInternalServerError()
-    {
-        // Arrange
-        var internalResult = Result.Failed();
-
-        // Act
-        var result = internalResult.ToHttpResponse();
-
-        // Assert
-        Assert.That(result, Is.EqualTo(Results.InternalServerError()));
-    }
-
-    [Test]
     public void ToHttpResponse_WhenInvalid_ShouldReturnBadRequest()
     {
         // Arrange
@@ -53,6 +39,19 @@ public class ResultExtensionsTests : TestBase
     }
 
     [Test]
+    public void ToHttpResponse_WhenDomainError_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var internalResult = Result.DomainError("Test Domain Error");
+
+        // Act
+        var result = internalResult.ToHttpResponse();
+
+        // Assert
+        Assert.That(result, Is.TypeOf<BadRequest<string>>());
+    }
+
+    [Test]
     public void ToHttpResponse_WhenNotFound_ShouldReturnNotFound()
     {
         // Arrange
@@ -66,7 +65,7 @@ public class ResultExtensionsTests : TestBase
     }
 
     [Test]
-    public void ToHttpResponse_WhenCancelled_ShouldReturnInternalServerError()
+    public void ToHttpResponse_WhenCancelled_ShouldReturnBadRequest()
     {
         // Arrange
         var internalResult = Result.Cancelled();
@@ -75,14 +74,18 @@ public class ResultExtensionsTests : TestBase
         var result = internalResult.ToHttpResponse();
 
         // Assert
-        Assert.That(result, Is.EqualTo(Results.InternalServerError()));
+        Assert.That(result, Is.TypeOf<BadRequest<string>>());
+
+        var badResult = result as BadRequest<string>;
+
+        Assert.That(badResult?.Value, Is.EqualTo("The request was cancelled."));
     }
 
     [Test]
     public void ToHttpResponse_WhenInternalError_ShouldReturnInternalServerError()
     {
         // Arrange
-        var internalResult = Result.InternalError();
+        var internalResult = Result.InternalError("Test Internal Error");
 
         // Act
         var result = internalResult.ToHttpResponse();
@@ -102,19 +105,6 @@ public class ResultExtensionsTests : TestBase
 
         // Assert
         Assert.That(result, Is.TypeOf<Ok<int>>());
-    }
-
-    [Test]
-    public void ToHttpResponse_WhenValueAndFailed_ShouldReturnInternalServerError()
-    {
-        // Arrange
-        var internalResult = Result<int>.Failed();
-
-        // Act
-        var result = internalResult.ToHttpResponse();
-
-        // Assert
-        Assert.That(result, Is.EqualTo(Results.InternalServerError()));
     }
 
     [Test]
@@ -144,7 +134,7 @@ public class ResultExtensionsTests : TestBase
     }
 
     [Test]
-    public void ToHttpResponse_WhenValueAndCancelled_ShouldReturnInternalServerError()
+    public void ToHttpResponse_WhenValueAndCancelled_ShouldReturnBadRequest()
     {
         // Arrange
         var internalResult = Result<int>.Cancelled();
@@ -153,14 +143,18 @@ public class ResultExtensionsTests : TestBase
         var result = internalResult.ToHttpResponse();
 
         // Assert
-        Assert.That(result, Is.EqualTo(Results.InternalServerError()));
+        Assert.That(result, Is.TypeOf<BadRequest<string>>());
+
+        var badResult = result as BadRequest<string>;
+
+        Assert.That(badResult?.Value, Is.EqualTo("The request was cancelled."));
     }
 
     [Test]
     public void ToHttpResponse_WhenValueAndInternalError_ShouldReturnInternalServerError()
     {
         // Arrange
-        var internalResult = Result<int>.InternalError();
+        var internalResult = Result<int>.InternalError("Test Internal Error");
 
         // Act
         var result = internalResult.ToHttpResponse();

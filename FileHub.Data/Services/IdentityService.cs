@@ -20,7 +20,7 @@ public class IdentityService(IOptions<IdentityOptions> options,
 
         return result.Succeeded
             ? Result.Success()
-            : Result.Failed("Registration failed.");
+            : Result.DomainError(result.ToString());
     }
 
     public async Task<Result> LoginAsync(string username, string password)
@@ -29,12 +29,12 @@ public class IdentityService(IOptions<IdentityOptions> options,
 
         if (user is null)
         {
-            return Result.Failed("User not found.");
+            return Result.DomainError("User not found.");
         }
 
         if (options.Value.SignIn.RequireConfirmedAccount && !await userManager.IsEmailConfirmedAsync(user))
         {
-            return Result.Failed("User not confirmed.");
+            return Result.DomainError("User not confirmed.");
         }
 
         signInManager.AuthenticationScheme = IdentityConstants.ApplicationScheme;
@@ -43,7 +43,7 @@ public class IdentityService(IOptions<IdentityOptions> options,
 
         return result.Succeeded
             ? Result.Success()
-            : Result.Failed("Login failed.");
+            : Result.DomainError(result.ToString());
     }
 
     public async Task<Result> LogoutAsync()
@@ -59,7 +59,7 @@ public class IdentityService(IOptions<IdentityOptions> options,
 
         if (user is null)
         {
-            return Result<UserInfo>.Failed("User not found.");
+            return Result<UserInfo>.DomainError("User not found.");
         }
 
         var userInfo = new UserInfo
@@ -77,24 +77,31 @@ public class IdentityService(IOptions<IdentityOptions> options,
 
         if (user is null)
         {
-            return Result.Failed("User not found.");
+            return Result.DomainError("User not found.");
         }
+
+        var validationState = new ValidationState();
 
         if (string.IsNullOrWhiteSpace(oldPassword))
         {
-            return Result.Failed("Old password cannot be empty.");
+            validationState.AddError(nameof(oldPassword), "Must not be null, empty, or whitespace .");
         }
 
         if (string.IsNullOrWhiteSpace(newPassword))
         {
-            return Result.Failed("New password cannot be empty.");
+            validationState.AddError(nameof(newPassword), "Must not be null, empty, or whitespace .");
+        }
+
+        if (validationState.HasErrors)
+        {
+            return Result.Invalid(validationState);
         }
 
         var result = await userManager.ChangePasswordAsync(user, oldPassword, newPassword);
 
         return result.Succeeded
             ? Result.Success()
-            : Result.Failed("Password change failed.");
+            : Result.DomainError(result.ToString());
     }
 }
 

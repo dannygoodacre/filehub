@@ -16,33 +16,19 @@ public class ResultTests : TestBase
     }
 
     [Test]
-    public void Failed()
-    {
-        // Act
-        var result = Result.Failed();
-
-        // Assert
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(result.Status, Is.EqualTo(Status.Failed));
-            Assert.That(result.Error, Is.Null);
-        }
-    }
-
-    [Test]
     public void FailedWithMessage()
     {
         // Arrange
         const string message = "Test Message";
 
         // Act
-        var result = Result.Failed(message);
+        var result = Result.InternalError(message);
 
         // Assert
         using (Assert.EnterMultipleScope())
         {
 
-            Assert.That(result.Status, Is.EqualTo(Status.Failed));
+            Assert.That(result.Status, Is.EqualTo(Status.InternalError));
             Assert.That(result.Error, Is.EqualTo(message));
         }
     }
@@ -54,12 +40,12 @@ public class ResultTests : TestBase
         var exception = new Exception("Test Exception");
 
         // Act
-        var result = Result.Failed(exception);
+        var result = Result.InternalError(exception);
 
         // Assert
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(result.Status, Is.EqualTo(Status.Failed));
+            Assert.That(result.Status, Is.EqualTo(Status.InternalError));
             Assert.That(result.Exception, Is.EqualTo(exception));
         }
     }
@@ -115,7 +101,7 @@ public class ResultTests : TestBase
     public void InternalError()
     {
         // Act
-        var result = Result.InternalError();
+        var result = Result.InternalError("Test Error");
 
         // Assert
         Assert.That(result.Status, Is.EqualTo(Status.InternalError));
@@ -153,7 +139,7 @@ public class ResultTests : TestBase
     public void IsSuccess_WhenUnsuccessful_ReturnsFalse()
     {
         // Act
-        var result = Result.Failed();
+        var result = Result.InternalError("Test Error");
 
         // Assert
         Assert.That(result.IsSuccess, Is.False);
@@ -173,7 +159,7 @@ public class ResultTests : TestBase
     public void IsSuccessWithValue_WhenUnsuccessful_ReturnsFalse()
     {
         // Act
-        var result = Result<int>.Failed();
+        var result = Result<int>.InternalError("Test Error");
 
         // Assert
         Assert.That(result.IsSuccess, Is.False);
@@ -193,50 +179,6 @@ public class ResultTests : TestBase
         {
             Assert.That(result.Status, Is.EqualTo(Status.Success));
             Assert.That(result.Value, Is.EqualTo(value));
-        }
-    }
-
-    [Test]
-    public void Failed_WithValue()
-    {
-        // Act
-        var result = Result<int>.Failed();
-
-        // Assert
-        Assert.That(result.Status, Is.EqualTo(Status.Failed));
-    }
-
-    [Test]
-    public void FailedWithMessage_WithValue()
-    {
-        // Arrange
-        const string error = "Test Error";
-
-        // Act
-        var result = Result<int>.Failed(error);
-
-        // Assert
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(result.Status, Is.EqualTo(Status.Failed));
-            Assert.That(result.Error, Is.EqualTo(error));
-        }
-    }
-
-    [Test]
-    public void FailedWithException_WithValue()
-    {
-        // Arrange
-        var exception = new Exception("Test Exception");
-
-        // Act
-        var result = Result<int>.Failed(exception);
-
-        // Assert
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(result.Status, Is.EqualTo(Status.Failed));
-            Assert.That(result.Exception, Is.EqualTo(exception));
         }
     }
 
@@ -291,7 +233,7 @@ public class ResultTests : TestBase
     public void InternalError_WithValue()
     {
         // Act
-        var result = Result<int>.InternalError();
+        var result = Result<int>.InternalError("Test Error");
 
         // Assert
         Assert.That(result.Status, Is.EqualTo(Status.InternalError));
