@@ -148,8 +148,6 @@ public class GetFileMetadataTests : TestBase
 
         Setup_FileLocationService_GetFileAccessLocation();
 
-        _mockLogger.Setup(LogLevel.Information, $"Query '{Name}' completed with external ID '{_requestId}', ID '{_testId}'.");
-
         // Act
         var result = await Act();
 

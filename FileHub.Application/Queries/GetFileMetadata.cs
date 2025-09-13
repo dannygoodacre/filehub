@@ -48,8 +48,6 @@ internal sealed class GetFileMetadata(ILogger<GetFileMetadata> logger,
 
         var metadata = file.ToMetadata(query.Id, accessLocation);
 
-        logger.LogInformation("Query '{Name}' completed with external ID '{ExternalFileId}', ID '{id}'.", Name, query.Id, id);
-
         return Result<FileMetadata>.Success(metadata);
     }
 

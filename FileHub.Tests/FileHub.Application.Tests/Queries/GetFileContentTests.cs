@@ -153,13 +153,11 @@ public class GetFileContentTests : TestBase
 
         Setup_FileRepository_GetByIdAsync();
 
-        const string failureMessage = "Test Failure Message";
-
         _mockStorageService
             .Setup(x => x.OpenReadStreamAsync(
                 It.Is<string>(y => y == TestStorageKey),
                 It.Is<CancellationToken>(y => y == _testCancellationToken)))
-            .ReturnsAsync(Result<Stream>.Failed(failureMessage))
+            .ReturnsAsync(Result<Stream>.InternalError("Test Failure Message"))
             .Verifiable(Times.Once);
 
         _mockLogger.Setup(LogLevel.Error, $"Query '{Name}' could not read the file with ID '{_testId}' and Storage Key '{TestStorageKey}'.");
@@ -168,7 +166,7 @@ public class GetFileContentTests : TestBase
         var result = await Act();
 
         // Assert
-        AssertFailed(result, failureMessage);
+        AssertInternalError(result, "File content not found.");
     }
 
     [Test]
@@ -191,7 +189,7 @@ public class GetFileContentTests : TestBase
         var result = await Act();
 
         // Assert
-        AssertFailed(result, "File content is empty.");
+        AssertInternalError(result, "File content is empty.");
     }
 
     [Test]
@@ -205,8 +203,6 @@ public class GetFileContentTests : TestBase
         Setup_FileRepository_GetByIdAsync();
 
         Setup_FileStorageService_OpenReadStreamAsync();
-
-        _mockLogger.Setup(LogLevel.Information, $"Query '{Name}' completed for external ID '{_requestId}', ID '{_testId}'.");
 
         // Act
         var result = await Act();

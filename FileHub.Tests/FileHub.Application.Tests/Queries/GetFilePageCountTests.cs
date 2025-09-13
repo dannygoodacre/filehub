@@ -72,8 +72,6 @@ public class GetFilePageCountTests : TestBase
             .ReturnsAsync(_testFileCount)
             .Verifiable(Times.Once);
 
-        _mockLogger.Setup(LogLevel.Information, $"Query '{Name}' completed with total file count '{_testFileCount}', total page count '{_testPageCount}', page size '{_requestPageSize}'.");
-
         // Act
         var result = await Act();
 

@@ -186,7 +186,7 @@ public class AddFileTests : TestBase
     }
 
     [Test]
-    public async Task ExecuteAsync_WhenExtensionNotFound_ShouldReturnFailed()
+    public async Task ExecuteAsync_WhenExtensionNotFound_ShouldReturnDomainError()
     {
         // Arrange
         _requestOriginalFileName = "filename_without_extension";
@@ -199,7 +199,7 @@ public class AddFileTests : TestBase
         var result = await Act();
 
         // Assert
-        AssertFailed(result, "Could not find file extension.");
+        AssertDomainError(result, "Could not find file extension.");
     }
 
     [Test]
@@ -210,21 +210,21 @@ public class AddFileTests : TestBase
 
         _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' could not save File '{_requestOriginalFileName}'.");
 
-        const string errorMessage = "Test storage error message.";
+        const string errorMessage = "Could not save file.";
 
         _mockFileStorageService
             .Setup(x => x.SaveAsync(
                 It.Is<Stream>(y => y == _requestContent),
                 It.Is<string>(y => y == TestExtension),
                 It.Is<CancellationToken>(y => y == _cancellationToken)))
-            .ReturnsAsync(Result<string>.Failed(errorMessage))
+            .ReturnsAsync(Result<string>.InternalError(errorMessage))
             .Verifiable(Times.Once);
 
         // Act
         var result = await Act();
 
         // Assert
-        AssertFailed(result, errorMessage);
+        AssertInternalError(result, errorMessage);
     }
 
     [Test]
@@ -241,8 +241,6 @@ public class AddFileTests : TestBase
         Setup_FileRepository_Add();
 
         Setup_ApplicationContext_SaveChangesAsync();
-
-        Setup_Logger_Completed();
 
         // Act
         var result = await Act();
@@ -266,8 +264,6 @@ public class AddFileTests : TestBase
 
         Setup_ApplicationContext_SaveChangesAsync();
 
-        Setup_Logger_Completed();
-
         // Act
         var result = await Act();
 
@@ -290,8 +286,6 @@ public class AddFileTests : TestBase
         Setup_FileRepository_Add();
 
         Setup_ApplicationContext_SaveChangesAsync();
-
-        Setup_Logger_Completed();
 
         // Act
         var result = await Act();
@@ -325,8 +319,6 @@ public class AddFileTests : TestBase
 
         Setup_ApplicationContext_SaveChangesAsync();
 
-        Setup_Logger_Completed();
-
         // Act
         var result = await Act();
 
@@ -353,8 +345,6 @@ public class AddFileTests : TestBase
 
         _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' wrote an unexpected number of entities to the database for File '{_requestOriginalFileName}': expected '1', actual '2'.");
 
-        Setup_Logger_Completed();
-
         // Act
         var result = await Act();
 
@@ -373,11 +363,6 @@ public class AddFileTests : TestBase
     private void Setup_Logger_Starting()
     {
         _mockLogger.Setup(LogLevel.Information, $"Command '{Name}' started for File '{_requestOriginalFileName}', Name '{_requestName}', User '{_requestUserId}'.");
-    }
-
-    private void Setup_Logger_Completed()
-    {
-        _mockLogger.Setup(LogLevel.Information, $"Command '{Name}' completed for File '{_requestOriginalFileName}', Name '{_requestName}'.");
     }
 
     private void Setup_FileStorageService_SaveAsync(int times = 1)

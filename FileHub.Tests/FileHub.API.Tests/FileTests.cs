@@ -24,7 +24,7 @@ public class FileTests
     }
 
     [OneTimeTearDown]
-    public void TearDown()
+    public void OneTimeTearDown()
     {
         _factory.Dispose();
     }

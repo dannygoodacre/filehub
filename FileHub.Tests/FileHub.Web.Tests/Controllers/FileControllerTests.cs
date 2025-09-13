@@ -23,7 +23,7 @@ public class FileControllerTests : TestBase
     private Mock<IGetFileMetadata> _mockGetFileMetadata;
 
     private Mock<IGetPaginatedFileMetadata> _mockGetPaginatedFileMetadata;
-    
+
     private Mock<IGetFilePageCount> _mockGetFilePageCount;
 
     private FileController _controller;
@@ -204,7 +204,7 @@ public class FileControllerTests : TestBase
         // Arrange
         Setup_CurrentUserService_GetCurrentUserId();
 
-        _testAddFileResult = Result.Failed();
+        _testAddFileResult = Result.InternalError("Test Error");
 
         Setup_AddFile_ExecuteAsync();
 
@@ -234,7 +234,7 @@ public class FileControllerTests : TestBase
     public async Task GetFileContentAsync_WhenGetFileFails_ShouldReturnInternalServerError()
     {
         // Arrange
-        _testGetFileContentResult = Result<FileContent>.Failed();
+        _testGetFileContentResult = Result<FileContent>.InternalError("Test Error");
 
         Setup_GetFileContent_ExecuteAsync();
 
@@ -266,7 +266,7 @@ public class FileControllerTests : TestBase
     public async Task GetFileMetadataAsync_WhenGetFileFails_ShouldReturnInternalServerError()
     {
         // Arrange
-        _testGetFileMetadataResult = Result<FileMetadata>.Failed();
+        _testGetFileMetadataResult = Result<FileMetadata>.InternalError("Test Error");
 
         Setup_GetFileMetadata_ExecuteAsync();
 
@@ -294,7 +294,7 @@ public class FileControllerTests : TestBase
     public async Task GetFilePageCountAsync_WhenGetFilePageCountFails_ShouldReturnInternalServerError()
     {
         // Arrange
-        _testGetFilePageCountResult = Result<int>.Failed();
+        _testGetFilePageCountResult = Result<int>.InternalError("Test Error");
 
         Setup_GetFilePageCount_ExecuteAsync();
 
@@ -322,7 +322,7 @@ public class FileControllerTests : TestBase
     public async Task GetPaginatedFilesMetadataAsync_WhenGetFilesFails_ShouldReturnInternalServerError()
     {
         // Arrange
-        _testGetPaginatedFileMetadataResult = Result<List<FileMetadata>>.Failed();
+        _testGetPaginatedFileMetadataResult = Result<List<FileMetadata>>.InternalError("Test Error");
 
         Setup_GetPaginatedFilesMetadata_ExecuteAsync();
 

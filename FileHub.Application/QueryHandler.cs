@@ -63,7 +63,7 @@ public abstract class QueryHandler<TQuery, TResult>(ILogger logger) where TQuery
         {
             logger.LogCritical(e, "Query '{Query}' failed with exception: {Exception}", Name, e.Message);
 
-            return Result<TResult>.InternalError();
+            return Result<TResult>.InternalError(e.Message);
         }
     }
 }

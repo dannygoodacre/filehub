@@ -27,7 +27,7 @@ internal class FileStorageService(ILogger<FileStorageService> logger,
         {
            logger.LogError(e, "Error while saving file.");
 
-            return Result<string>.InternalError();
+            return Result<string>.InternalError(e);
         }
     }
 
@@ -48,7 +48,7 @@ internal class FileStorageService(ILogger<FileStorageService> logger,
         {
             logger.LogError(e, "Error while opening file at Path '{Path}'.", path);
 
-            return Task.FromResult(Result<Stream>.InternalError());
+            return Task.FromResult(Result<Stream>.InternalError(e));
         }
     }
 }

@@ -1,4 +1,3 @@
-using FileHub.Core.Common;
 using FileHub.Data.Services;
 using FileHub.Web.Extensions;
 using FileHub.Web.Models;
@@ -60,9 +59,7 @@ public class AccountController(ICurrentUserService currentUserService, IIdentity
 
         var result = await identityService.GetUserInfoAsync(id);
 
-        return result.IsSuccess
-            ? Results.Ok(result.Value)
-            : Results.NotFound();
+        return result.ToHttpResponse();
     }
 
     /// <summary>
