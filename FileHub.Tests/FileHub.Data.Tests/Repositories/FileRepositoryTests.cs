@@ -11,11 +11,23 @@ public class FileRepositoryTests : TestBase
 
     private FileRepository _repository = null!;
 
+    private static readonly Category _category1 = new()
+    {
+        Id = 1,
+        Name = "Category 1"
+    };
+
+    private static readonly Category _category2 = new()
+    {
+        Id = 2,
+        Name = "Category 2"
+    };
+
     private static readonly List<Tag> _tags =
     [
         new() { Id = 1, Name = "test tag 1" },
         new() { Id = 2, Name = "test tag 2" },
-        new() { Id = 3, Name = "test tag 3" },
+        new() { Id = 3, Name = "test tag 3" }
     ];
 
     private readonly List<StoredFile> _storedFiles =
@@ -27,6 +39,7 @@ public class FileRepositoryTests : TestBase
             ContentType = "test content type 1",
             StorageKey = "test storage key 1",
             CreatedAt = new DateTime(2025, 01, 01),
+            Category = _category1,
             Tags = [_tags[0], _tags[1]],
             UserId = 0
         },
@@ -38,6 +51,7 @@ public class FileRepositoryTests : TestBase
             ContentType = "test content type 2",
             StorageKey = "test storage key 2",
             CreatedAt = new DateTime(2025, 02, 01),
+            Category = _category2,
             Tags = [_tags[2]],
             UserId = 0
         },
@@ -49,6 +63,7 @@ public class FileRepositoryTests : TestBase
             ContentType = "test content type 3",
             StorageKey = "test storage key 3",
             CreatedAt = new DateTime(2025, 03, 01),
+            Category = _category2,
             Tags = [_tags[1]],
             UserId = 0
         }
@@ -87,7 +102,8 @@ public class FileRepositoryTests : TestBase
             ContentType = "test content type 4",
             StorageKey = "test storage key 4",
             CreatedAt = new DateTime(2025, 04, 01),
-            Tags = [new Tag() { Name = "test tag 1" }],
+            Category = _category1,
+            Tags = [new Tag { Name = "test tag 1" }],
             UserId = 1
         };
 

@@ -20,6 +20,8 @@ public class AddFileTests : TestBase
 
     private Mock<ITagRepository> _mockTagRepository;
 
+    private Mock<ICategoryRepository> _mockCategoryRepository;
+
     private Mock<IFileStorageService> _mockFileStorageService;
 
     private Mock<IApplicationContext> _mockApplicationContext;
@@ -35,6 +37,10 @@ public class AddFileTests : TestBase
     private string _requestName;
 
     private int _requestUserId;
+
+    private string _requestCategory;
+
+    private Category _testCategory;
 
     private List<string> _requestTags;
 
@@ -63,6 +69,10 @@ public class AddFileTests : TestBase
 
         _requestUserId = 123;
 
+        _requestCategory = "Test Category";
+
+        _testCategory = new Category { Name = _requestCategory };
+
         _requestTags = ["Test Tag 1", "Test Tag 2"];
 
         _testTags = [new Tag { Name = "Test Tag 1" }, new Tag { Name = "Test Tag 2" }];
@@ -79,6 +89,8 @@ public class AddFileTests : TestBase
 
         _mockTagRepository = new Mock<ITagRepository>(MockBehavior.Strict);
 
+        _mockCategoryRepository = new Mock<ICategoryRepository>(MockBehavior.Strict);
+
         _mockFileStorageService = new Mock<IFileStorageService>(MockBehavior.Strict);
 
         _mockApplicationContext = new Mock<IApplicationContext>(MockBehavior.Strict);
@@ -86,6 +98,7 @@ public class AddFileTests : TestBase
         _command = new AddFile(_mockLogger.Object,
                                _mockFileRepository.Object,
                                _mockTagRepository.Object,
+                               _mockCategoryRepository.Object,
                                _mockFileStorageService.Object,
                                _mockApplicationContext.Object);
     }
@@ -128,7 +141,7 @@ public class AddFileTests : TestBase
         // Arrange
         _requestOriginalFileName = originalFileName;
 
-        _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' failed validation: OriginalFileName:{Environment.NewLine}  - Must not be null or whitespace.");
+        _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' failed validation: OriginalFileName:{Environment.NewLine}  - Must not be null, empty, or whitespace.");
 
         // Act
         var result = await Act();
@@ -145,7 +158,7 @@ public class AddFileTests : TestBase
         // Arrange
         _requestName = name;
 
-        _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' failed validation: Name:{Environment.NewLine}  - Must not be null or whitespace.");
+        _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' failed validation: Name:{Environment.NewLine}  - Must not be null, empty, or whitespace.");
 
         // Act
         var result = await Act();
@@ -170,13 +183,30 @@ public class AddFileTests : TestBase
         AssertInvalid(result);
     }
 
+    [TestCase(null!)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public async Task ExecuteAsync_WhenCategoryInvalid_ShouldReturnInvalid(string category)
+    {
+        // Arrange
+        _requestCategory = category;
+
+        _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' failed validation: Category:{Environment.NewLine}  - Must not be null, empty, or whitespace.");
+
+        // Act
+        var result = await Act();
+
+        // Assert
+        AssertInvalid(result);
+    }
+
     [Test]
     public async Task ExecuteAsync_WhenTagsWhitespace_ShouldReturnInvalid()
     {
         // Arrange
         _requestTags = ["Test tag 1", " "];
 
-        _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' failed validation: Tags:{Environment.NewLine}  - Must not be null or whitespace.");
+        _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' failed validation: Tags:{Environment.NewLine}  - Must not be null, empty, or whitespace.");
 
         // Act
         var result = await Act();
@@ -228,6 +258,27 @@ public class AddFileTests : TestBase
     }
 
     [Test]
+    public async Task ExecuteAsync_WhenCategoryDoesNotExist_ShouldReturnDomainError()
+    {
+        // Arrange
+        _testCategory = null!;
+
+        Setup_Logger_Starting();
+
+        Setup_FileStorageService_SaveAsync();
+
+        Setup_CategoryRepository_GetByNameForUpdateAsync();
+
+        _mockLogger.Setup(LogLevel.Error, $"Command '{Name}' could not find category '{_requestCategory}'.");
+
+        // Act
+        var result = await Act();
+
+        // Assert
+        AssertDomainError(result, "Category not found.");
+    }
+
+    [Test]
     public async Task ExecuteAsync_WhenTagsNull_ShouldReturnSuccess()
     {
         // Arrange
@@ -237,6 +288,8 @@ public class AddFileTests : TestBase
         Setup_Logger_Starting();
 
         Setup_FileStorageService_SaveAsync();
+
+        Setup_CategoryRepository_GetByNameForUpdateAsync();
 
         Setup_FileRepository_Add();
 
@@ -260,6 +313,8 @@ public class AddFileTests : TestBase
 
         Setup_FileStorageService_SaveAsync();
 
+        Setup_CategoryRepository_GetByNameForUpdateAsync();
+
         Setup_FileRepository_Add();
 
         Setup_ApplicationContext_SaveChangesAsync();
@@ -280,6 +335,8 @@ public class AddFileTests : TestBase
         Setup_Logger_Starting();
 
         Setup_FileStorageService_SaveAsync();
+
+        Setup_CategoryRepository_GetByNameForUpdateAsync();
 
         Setup_TagRepository_GetManyAsync();
 
@@ -305,6 +362,8 @@ public class AddFileTests : TestBase
         Setup_Logger_Starting();
 
         Setup_FileStorageService_SaveAsync();
+
+        Setup_CategoryRepository_GetByNameForUpdateAsync();
 
         Setup_TagRepository_GetManyAsync();
 
@@ -337,6 +396,8 @@ public class AddFileTests : TestBase
 
         Setup_FileStorageService_SaveAsync();
 
+        Setup_CategoryRepository_GetByNameForUpdateAsync();
+
         Setup_FileRepository_Add();
 
         _mockApplicationContext
@@ -357,6 +418,7 @@ public class AddFileTests : TestBase
                                                                     _requestOriginalFileName,
                                                                     _requestName,
                                                                     _requestUserId,
+                                                                    _requestCategory,
                                                                     _requestTags,
                                                                     _cancellationToken);
 
@@ -404,6 +466,16 @@ public class AddFileTests : TestBase
                 It.Is<List<string>>(y => y == _requestTags),
                 It.Is<CancellationToken>(y => y == _cancellationToken)))
             .ReturnsAsync(_testTags)
+            .Verifiable(Times.Exactly(times));
+    }
+
+    private void Setup_CategoryRepository_GetByNameForUpdateAsync(int times = 1)
+    {
+        _mockCategoryRepository
+            .Setup(x => x.GetByNameForUpdateAsync(
+                It.Is<string>(y => y == _requestCategory),
+                It.Is<CancellationToken>(y => y == _cancellationToken)))
+            .ReturnsAsync(_testCategory)
             .Verifiable(Times.Exactly(times));
     }
 }

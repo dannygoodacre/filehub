@@ -20,6 +20,7 @@ public class ServiceCollectionExtensionsTests : TestBase
 
         services.AddSingleton(Mock.Of<ITagRepository>());
         services.AddSingleton(Mock.Of<IFileRepository>());
+        services.AddSingleton(Mock.Of<ICategoryRepository>());
 
         services.AddSingleton(Mock.Of<IApplicationContext>());
 
@@ -39,8 +40,12 @@ public class ServiceCollectionExtensionsTests : TestBase
         using (Assert.EnterMultipleScope())
         {
             Assert.That(provider.GetService<IAddFile>(), Is.Not.Null);
+            Assert.That(provider.GetService<IAddCategory>(), Is.Not.Null);
+
             Assert.That(provider.GetService<IGetFileContent>(), Is.Not.Null);
             Assert.That(provider.GetService<IGetFileMetadata>(), Is.Not.Null);
+            Assert.That(provider.GetService<IGetFilePageCount>(), Is.Not.Null);
+            Assert.That(provider.GetService<IGetPaginatedFileMetadata>(), Is.Not.Null);
         }
     }
 }

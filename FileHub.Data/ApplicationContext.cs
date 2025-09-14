@@ -8,16 +8,30 @@ using Microsoft.Extensions.Configuration;
 
 namespace FileHub.Data;
 
-internal class ApplicationContext(DbContextOptions<ApplicationContext> options)
-    : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>(options), IApplicationContext
+internal class ApplicationContext(DbContextOptions<ApplicationContext> options) : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>(options), IApplicationContext
 {
     public DbSet<StoredFile> StoredFiles { get; init; }
 
     public DbSet<Tag> Tags { get; init; }
 
+    public DbSet<Category> Categories { get; init; }
+
     public async Task<int> SaveChangesAsync() => await base.SaveChangesAsync();
 
     public Task MigrateAsync() => Database.MigrateAsync();
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<Category>()
+            .HasIndex(c => c.Name)
+            .IsUnique();
+
+        builder.Entity<Tag>()
+            .HasIndex(t => t.Name)
+            .IsUnique();
+
+        base.OnModelCreating(builder);
+    }
 }
 
 internal class ApplicationContextFactory : IDesignTimeDbContextFactory<ApplicationContext>

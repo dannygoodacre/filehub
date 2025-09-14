@@ -12,5 +12,7 @@ public class FileMetadata
 
     public required DateTime CreatedAt { get; init; }
 
+    public required string Category { get; init; }
+
     public required List<string> Tags { get; init; }
 }

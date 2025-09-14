@@ -18,6 +18,8 @@ public class GetPaginatedFilesMetadataTests : TestBase
 
     private Mock<IFileRepository> _mockRepository = null!;
 
+    private Mock<ICategoryRepository> _mockCategoryRepository = null!;
+
     private Mock<IFileLocationService> _mockLocationService = null!;
 
     private Mock<IIdEncoderService<int>> _mockIdEncoderService = null!;
@@ -27,6 +29,8 @@ public class GetPaginatedFilesMetadataTests : TestBase
     private int _requestPageNumber;
 
     private int _requestPageSize;
+
+    private string? _requestCategory;
 
     private CancellationToken _testCancellationToken;
 
@@ -40,6 +44,10 @@ public class GetPaginatedFilesMetadataTests : TestBase
 
     private string _testAccessLocation2;
 
+    private int _testCategoryId;
+
+    private Category? _testCategory;
+
     [SetUp]
     public void SetUp()
     {
@@ -47,12 +55,15 @@ public class GetPaginatedFilesMetadataTests : TestBase
 
         _mockRepository = new Mock<IFileRepository>(MockBehavior.Strict);
 
+        _mockCategoryRepository = new Mock<ICategoryRepository>(MockBehavior.Strict);
+
         _mockLocationService = new Mock<IFileLocationService>(MockBehavior.Strict);
 
         _mockIdEncoderService = new Mock<IIdEncoderService<int>>(MockBehavior.Strict);
 
         _query = new GetPaginatedFilesMetadata(_mockLogger.Object,
                                                _mockRepository.Object,
+                                               _mockCategoryRepository.Object,
                                                _mockLocationService.Object,
                                                _mockIdEncoderService.Object);
 
@@ -60,7 +71,17 @@ public class GetPaginatedFilesMetadataTests : TestBase
 
         _requestPageSize = 10;
 
+        _requestCategory = null;
+
         _testCancellationToken = CancellationToken.None;
+
+        _testCategoryId = 123;
+
+        _testCategory = new Category()
+        {
+            Id = _testCategoryId,
+            Name = "Test Category",
+        };
 
         _testStoredFiles =
         [
@@ -71,6 +92,7 @@ public class GetPaginatedFilesMetadataTests : TestBase
                 StorageKey = "Test Storage Key 1",
                 ContentType = "Test Content Type 1",
                 CreatedAt = new DateTime(2020, 01, 05),
+                Category = _testCategory,
                 Tags = [],
                 UserId = 456
             },
@@ -81,6 +103,7 @@ public class GetPaginatedFilesMetadataTests : TestBase
                 StorageKey = "Test Storage Key 2",
                 ContentType = "Test Content Type 2",
                 CreatedAt = new DateTime(2021, 12, 05),
+                Category = _testCategory,
                 Tags = [],
                 UserId = 101
             }
@@ -119,6 +142,22 @@ public class GetPaginatedFilesMetadataTests : TestBase
         _requestPageSize = pageSize;
 
         _mockLogger.Setup(LogLevel.Error, $"Query '{Name}' failed validation: PageSize:{Environment.NewLine}  - Must be between 1 and 100, inclusive.");
+
+        // Act
+        var result = await Act();
+
+        // Assert
+        AssertInvalid(result);
+    }
+
+    [TestCase("")]
+    [TestCase(" ")]
+    public async Task ExecuteAsync_WhenCategoryIsInvalid_ShouldReturnInvalid(string category)
+    {
+        // Arrange
+        _requestCategory = category;
+
+        _mockLogger.Setup(LogLevel.Error, $"Query '{Name}' failed validation: Category:{Environment.NewLine}  - Must not be empty or whitespace.");
 
         // Act
         var result = await Act();
@@ -186,14 +225,92 @@ public class GetPaginatedFilesMetadataTests : TestBase
         }
     }
 
-    private async Task<Result<List<FileMetadata>>> Act() => await _query.ExecuteAsync(_requestPageNumber, _requestPageSize, _testCancellationToken);
+    [Test]
+    public async Task ExecuteAsync_WhenCategoryIsProvidedAndNotFound_ShouldReturnDomainError()
+    {
+        // Arrange
+        _requestCategory = "Test Category";
+
+        Setup_Logger_StartingWithCategory();
+
+        _testCategory = null;
+
+        Setup_CategoryRepository_GetByNameAsync();
+
+        _mockLogger.Setup(LogLevel.Error, $"Query '{Name}' could not find category '{_requestCategory}'.");
+
+        // Act
+        var result = await Act();
+
+        // Assert
+        AssertDomainError(result, "Category not found.");
+    }
+
+    [Test]
+    public async Task ExecuteAsync_WhenCategoryIsProvidedAndFound_ShouldReturnSuccess()
+    {
+        // Arrange
+        _requestCategory = "Test Category";
+
+        Setup_Logger_StartingWithCategory();
+
+        Setup_CategoryRepository_GetByNameAsync();
+
+        Setup_Repository_GetPaginatedFilesByCategoryAsync();
+
+        Setup_IdEncoderService_Encode();
+
+        Setup_LocationService_GetFileAccessLocation();
+
+        // Act
+        var result = await Act();
+
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+            AssertSuccess(result);
+
+            Assert.That(result.Value, Has.Count.EqualTo(2));
+
+            Assert.That(result.Value?[0].Id, Is.EqualTo(_testExternalId1));
+            Assert.That(result.Value?[0].Name, Is.EqualTo(_testStoredFiles[0].Name));
+            Assert.That(result.Value?[0].AccessLocation, Is.EqualTo(_testAccessLocation1));
+            Assert.That(result.Value?[0].ContentType, Is.EqualTo(_testStoredFiles[0].ContentType));
+            Assert.That(result.Value?[0].CreatedAt, Is.EqualTo(_testStoredFiles[0].CreatedAt));
+            Assert.That(result.Value?[0].Tags, Is.EquivalentTo(_testStoredFiles[0].Tags));
+
+            Assert.That(result.Value?[1].Id, Is.EqualTo(_testExternalId2));
+            Assert.That(result.Value?[1].Name, Is.EqualTo(_testStoredFiles[1].Name));
+            Assert.That(result.Value?[1].AccessLocation, Is.EqualTo(_testAccessLocation2));
+            Assert.That(result.Value?[1].ContentType, Is.EqualTo(_testStoredFiles[1].ContentType));
+            Assert.That(result.Value?[1].CreatedAt, Is.EqualTo(_testStoredFiles[1].CreatedAt));
+            Assert.That(result.Value?[1].Tags, Is.EquivalentTo(_testStoredFiles[1].Tags));
+        }
+    }
+
+    private async Task<Result<List<FileMetadata>>> Act() => await _query.ExecuteAsync(_requestPageNumber, _requestPageSize, _requestCategory, _testCancellationToken);
 
     private void Setup_Logger_Starting()
     {
         _mockLogger.Setup(LogLevel.Information, $"Query '{Name}' started with page number '{_requestPageNumber}', page count '{_requestPageSize}'.");
     }
 
-    private void Setup_Repository_GetPaginatedFilesAsync(int times = 1)
+    private void Setup_Logger_StartingWithCategory()
+    {
+        _mockLogger.Setup(LogLevel.Information, $"Query '{Name}' started with page number '{_requestPageNumber}', page count '{_requestPageSize}', category '{_requestCategory}'.");
+    }
+
+    private void Setup_CategoryRepository_GetByNameAsync()
+    {
+        _mockCategoryRepository
+            .Setup(x => x.GetByNameAsync(
+                It.Is<string>(y => y == _requestCategory),
+                It.Is<CancellationToken>(y => y == _testCancellationToken)))
+            .ReturnsAsync(_testCategory)
+            .Verifiable(Times.Once);
+    }
+
+    private void Setup_Repository_GetPaginatedFilesAsync()
     {
         _mockRepository
             .Setup(x => x.GetPaginatedFilesAsync(
@@ -201,7 +318,19 @@ public class GetPaginatedFilesMetadataTests : TestBase
                 It.Is<int>(y => y == _requestPageSize),
                 It.Is<CancellationToken>(y => y == _testCancellationToken)))
             .ReturnsAsync(_testStoredFiles)
-            .Verifiable(Times.Exactly(times));
+            .Verifiable(Times.Once);
+    }
+
+    private void Setup_Repository_GetPaginatedFilesByCategoryAsync()
+    {
+        _mockRepository
+            .Setup(x => x.GetPaginatedFilesByCategoryAsync(
+                It.Is<int>(y => y ==_testCategoryId),
+                It.Is<int>(y => y == _requestPageNumber - 1),
+                It.Is<int>(y => y == _requestPageSize),
+                It.Is<CancellationToken>(y => y == _testCancellationToken)))
+            .ReturnsAsync(_testStoredFiles)
+            .Verifiable(Times.Once);
     }
 
     private void Setup_IdEncoderService_Encode()

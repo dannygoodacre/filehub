@@ -14,10 +14,10 @@ public class DatabaseSeederServiceTests : TestBase
 
     private const string Password = "test_password";
 
-    private readonly ApplicationUser _user = new() { UserName = Username, };
+    private readonly ApplicationUser _user = new() { UserName = Username };
 
     private readonly IConfiguration _configuration = new ConfigurationBuilder()
-        .AddInMemoryCollection(new Dictionary<string, string>()
+        .AddInMemoryCollection(new Dictionary<string, string>
         {
             { "SeedUser:Username", Username },
             { "SeedUser:Password", Password }

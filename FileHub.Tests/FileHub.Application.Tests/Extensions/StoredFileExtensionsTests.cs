@@ -15,6 +15,7 @@ public class StoredFileExtensionsTests : TestBase
             Id = 123,
             Name = "Test Name",
             StorageKey = "Test Storage Key",
+            Category = new Category { Name = "Test Category" },
             Tags = [new Tag { Name = "Test Tag 1" }, new Tag { Name = "Test Tag 2" }],
             CreatedAt = DateTime.UtcNow,
             ContentType = "Test Content Type",
@@ -36,6 +37,7 @@ public class StoredFileExtensionsTests : TestBase
             Assert.That(result.AccessLocation, Is.EqualTo(accessLocation));
             Assert.That(result.ContentType, Is.EqualTo(file.ContentType));
             Assert.That(result.CreatedAt, Is.EqualTo(file.CreatedAt));
+            Assert.That(result.Category, Is.EqualTo(file.Category.Name));
 
             Assert.That(result.Tags, Has.Count.EqualTo(file.Tags.Count));
             Assert.That(result.Tags[0], Is.EqualTo(file.Tags.First().Name));

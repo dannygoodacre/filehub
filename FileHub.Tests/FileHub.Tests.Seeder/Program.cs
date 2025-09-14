@@ -28,6 +28,13 @@ class Program
         await context.Database.ExecuteSqlRawAsync("DELETE FROM Tags");
         await context.Database.ExecuteSqlRawAsync("DELETE FROM StoredFiles");
 
+        var categories = new List<Category>
+        {
+            new() {Name = "Category 1"},
+            new() {Name = "Category 2"},
+            new() {Name = "Category 3"}
+        };
+
         var tags = new List<Tag>
         {
             new() { Name = "Tag 1" },
@@ -39,7 +46,7 @@ class Program
 
         for (var i = 0; i < 3; i++)
         {
-            await context.StoredFiles.AddRangeAsync(GetStoredFiles(dockerFilesDirectory, tags));
+            await context.StoredFiles.AddRangeAsync(GetStoredFiles(dockerFilesDirectory, categories, tags));
         }
 
         await context.SaveChangesAsync();
@@ -55,7 +62,7 @@ class Program
         }
     }
 
-    private static List<StoredFile> GetStoredFiles(string fileStoragePath, List<Tag> tags)
+    private static List<StoredFile> GetStoredFiles(string fileStoragePath, List<Category> categories, List<Tag> tags)
         =>
         [
             new()
@@ -64,8 +71,9 @@ class Program
                 ContentType = "image/png",
                 StorageKey = $"{fileStoragePath}/image1.png",
                 CreatedAt = DateTime.UtcNow,
+                Category = categories[0],
                 Tags = tags[..1],
-                UserId = 1,
+                UserId = 1
             },
 
             new()
@@ -74,8 +82,9 @@ class Program
                 ContentType = "image/png",
                 StorageKey = $"{fileStoragePath}/image2.png",
                 CreatedAt = DateTime.UtcNow,
+                Category = categories[1],
                 Tags = tags[..2],
-                UserId = 1,
+                UserId = 1
             },
 
             new()
@@ -84,8 +93,9 @@ class Program
                 ContentType = "image/png",
                 StorageKey = $"{fileStoragePath}/image3.png",
                 CreatedAt = DateTime.UtcNow,
+                Category = categories[2],
                 Tags = tags[..3],
-                UserId = 1,
+                UserId = 1
             },
 
             new()
@@ -94,8 +104,9 @@ class Program
                 ContentType = "text/plain",
                 StorageKey = $"{fileStoragePath}/text1.txt",
                 CreatedAt = DateTime.UtcNow,
+                Category = categories[0],
                 Tags = tags[..4],
-                UserId = 1,
+                UserId = 1
             },
 
             new()
@@ -104,8 +115,9 @@ class Program
                 ContentType = "text/plain",
                 StorageKey = $"{fileStoragePath}/text2.txt",
                 CreatedAt = DateTime.UtcNow,
+                Category = categories[1],
                 Tags = tags[..5],
-                UserId = 1,
+                UserId = 1
             }
         ];
 }

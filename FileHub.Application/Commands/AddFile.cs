@@ -11,6 +11,7 @@ namespace FileHub.Application.Commands;
 internal sealed class AddFile(ILogger<AddFile> logger,
                               IFileRepository fileRepository,
                               ITagRepository tagRepository,
+                              ICategoryRepository categoryRepository,
                               IFileStorageService storageService,
                               IApplicationContext context) : CommandHandler<AddFileCommand>(logger), IAddFile
 {
@@ -30,12 +31,12 @@ internal sealed class AddFile(ILogger<AddFile> logger,
 
         if (string.IsNullOrWhiteSpace(command.OriginalFileName))
         {
-            validationState.AddError(nameof(command.OriginalFileName), "Must not be null or whitespace.");
+            validationState.AddError(nameof(command.OriginalFileName), "Must not be null, empty, or whitespace.");
         }
 
         if (string.IsNullOrWhiteSpace(command.Name))
         {
-            validationState.AddError(nameof(command.Name), "Must not be null or whitespace.");
+            validationState.AddError(nameof(command.Name), "Must not be null, empty, or whitespace.");
         }
 
         if (command.UserId <= 0)
@@ -43,9 +44,14 @@ internal sealed class AddFile(ILogger<AddFile> logger,
             validationState.AddError(nameof(command.UserId), "Must be greater than 0.");
         }
 
+        if (string.IsNullOrWhiteSpace(command.Category))
+        {
+            validationState.AddError(nameof(command.Category), "Must not be null, empty, or whitespace.");
+        }
+
         if (command.Tags is not null && command.Tags.Any(string.IsNullOrWhiteSpace))
         {
-            validationState.AddError(nameof(command.Tags), "Must not be null or whitespace.");
+            validationState.AddError(nameof(command.Tags), "Must not be null, empty, or whitespace.");
         }
     }
 
@@ -69,6 +75,15 @@ internal sealed class AddFile(ILogger<AddFile> logger,
             logger.LogError("Command '{Command}' could not save File '{File}'.", Name, command.OriginalFileName);
 
             return Result.InternalError("Could not save file.");
+        }
+
+        var category = await categoryRepository.GetByNameForUpdateAsync(command.Category, cancellationToken);
+
+        if (category is null)
+        {
+            logger.LogError("Command '{Command}' could not find category '{Category}'.", Name, command.Category);
+
+            return Result.DomainError("Category not found.");
         }
 
         List<Tag> tags;
@@ -110,6 +125,7 @@ internal sealed class AddFile(ILogger<AddFile> logger,
             StorageKey = storageResult.Value,
             ContentType = command.ContentType,
             CreatedAt = DateTime.UtcNow,
+            Category = category,
             Tags = tags,
             UserId = command.UserId
         };
@@ -133,6 +149,7 @@ internal sealed class AddFile(ILogger<AddFile> logger,
                                      string originalFileName,
                                      string name,
                                      int userId,
+                                     string category,
                                      List<string>? tags,
                                      CancellationToken cancellationToken = default)
         => ExecuteAsync(new AddFileCommand
@@ -142,6 +159,7 @@ internal sealed class AddFile(ILogger<AddFile> logger,
             OriginalFileName = originalFileName,
             Name = name,
             UserId = userId,
+            Category = category,
             Tags = tags
         },
         cancellationToken);
@@ -160,6 +178,7 @@ public interface IAddFile
     /// <param name="originalFileName">The original name of the file, including its extension.</param>
     /// <param name="name">The name of the file.</param>
     /// <param name="userId">The ID of the user creating the file entry.</param>
+    /// <param name="category">The category of the file.</param>
     /// <param name="tags">A <see cref="List{T}"/> of tags associated with the file.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while performing the operation.</param>
     /// <returns>A <see cref="Result"/> indicating the outcome of the operation.</returns>
@@ -168,6 +187,7 @@ public interface IAddFile
                               string originalFileName,
                               string name,
                               int userId,
+                              string category,
                               List<string>? tags,
                               CancellationToken cancellationToken = default);
 }
@@ -183,6 +203,8 @@ internal class AddFileCommand : ICommand
     public required string Name { get; init; }
 
     public required int UserId { get; init; }
+
+    public required string Category { get; init; }
 
     public List<string>? Tags { get; init; }
 }

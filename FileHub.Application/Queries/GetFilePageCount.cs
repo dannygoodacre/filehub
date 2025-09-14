@@ -23,7 +23,7 @@ internal sealed class GetFilePageCount(ILogger<GetFilePageCount> logger,
 
         var fileCount = await repository.GetFilesCountAsync(cancellationToken);
 
-        var pageCount = fileCount / query.PageSize + 1;
+        var pageCount = (fileCount + query.PageSize - 1) / query.PageSize;
 
         return Result<int>.Success(pageCount);
     }

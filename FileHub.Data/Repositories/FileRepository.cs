@@ -10,6 +10,7 @@ internal class FileRepository(ApplicationContext context) : IFileRepository
 
     public async Task<StoredFile?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         => await context.StoredFiles
+            .Include(x => x.Category)
             .Include(x => x.Tags)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
@@ -17,7 +18,7 @@ internal class FileRepository(ApplicationContext context) : IFileRepository
         => await context.StoredFiles
             .Include(x => x.Tags)
             .Where(x => x.Tags.Any(t => t.Name == tagName))
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToListAsync(cancellationToken);
 
     public async Task<int> GetFilesCountAsync(CancellationToken cancellationToken = default)
         => await context.StoredFiles.CountAsync(cancellationToken);
@@ -27,6 +28,17 @@ internal class FileRepository(ApplicationContext context) : IFileRepository
             .OrderBy(x => x.Id)
             .Skip(pageNumber * pageSize)
             .Take(pageSize)
+            .Include(x => x.Category)
             .Include(x => x.Tags)
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToListAsync(cancellationToken);
+
+    public async Task<List<StoredFile>> GetPaginatedFilesByCategoryAsync(int categoryId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+        => await context.StoredFiles
+            .Where(x => x.CategoryId == categoryId)
+            .OrderBy(x => x.Id)
+            .Skip(pageNumber * pageSize)
+            .Take(pageSize)
+            .Include(x => x.Category)
+            .Include(x => x.Tags)
+            .ToListAsync(cancellationToken);
 }

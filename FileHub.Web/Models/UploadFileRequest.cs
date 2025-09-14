@@ -16,6 +16,11 @@ public class UploadFileRequest
     public required string Name { get; init; }
 
     /// <summary>
+    /// Category.
+    /// </summary>
+    public required string Category { get; init; }
+
+    /// <summary>
     /// Tags.
     /// </summary>
     public required List<string>? Tags { get; init; }

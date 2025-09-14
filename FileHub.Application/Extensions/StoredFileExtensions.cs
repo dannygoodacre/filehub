@@ -13,6 +13,7 @@ internal static class StoredFileExtensions
             AccessLocation = accessLocation,
             ContentType = file.ContentType,
             CreatedAt = file.CreatedAt,
+            Category = file.Category.Name,
             Tags = file.Tags.Select(x => x.Name).ToList()
         };
 }

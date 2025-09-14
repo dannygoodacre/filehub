@@ -13,7 +13,7 @@ internal static class ResultExtensions
                 Status.NotFound => Results.NotFound(),
                 Status.Cancelled => Results.BadRequest("The request was cancelled."),
                 Status.InternalError => Results.InternalServerError(),
-                _ => Results.InternalServerError(),
+                _ => Results.InternalServerError()
             };
 
     public static IResult ToHttpResponse<T>(this Result<T> result)

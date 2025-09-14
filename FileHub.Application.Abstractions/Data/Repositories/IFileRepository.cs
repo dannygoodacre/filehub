@@ -45,4 +45,14 @@ public interface IFileRepository
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while performing the operation.</param>
     /// <returns>A <see cref="List{T}"/> of <see cref="StoredFile"/> instances.</returns>
     Task<List<StoredFile>> GetPaginatedFilesAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Retrieve a subset of files with a given category using pagination.
+    /// </summary>
+    /// <param name="categoryId">The ID of the category.</param>
+    /// <param name="pageNumber">The page number to retrieve (zero-based).</param>
+    /// <param name="pageSize">The number of files to include per page.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while performing the operation.</param>
+    /// <returns>A <see cref="List{T}"/> of <see cref="StoredFile"/> instances.</returns>
+    Task<List<StoredFile>> GetPaginatedFilesByCategoryAsync(int categoryId, int pageNumber, int pageSize, CancellationToken cancellationToken = default);
 }

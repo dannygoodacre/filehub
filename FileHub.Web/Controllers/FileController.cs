@@ -39,6 +39,7 @@ public class FileController(ICurrentUserService currentUserService,
                                                 request.File.FileName,
                                                 request.Name,
                                                 userId,
+                                                request.Category,
                                                 request.Tags,
                                                 cancellationToken);
 
@@ -68,7 +69,7 @@ public class FileController(ICurrentUserService currentUserService,
 
         return result.ToHttpResponse();
     }
-    
+
     /// <summary>
     /// Fetch the number of pages of files for the given page size.
     /// </summary>
@@ -81,12 +82,12 @@ public class FileController(ICurrentUserService currentUserService,
     }
 
     /// <summary>
-    /// Fetch a paginated collection of file metadata.
+    /// Fetch a paginated collection of file metadata, optionally within a category.
     /// </summary>
     [HttpGet]
-    public async Task<IResult> GetPaginatedFileMetadataAsync([FromQuery] int page = 1, [FromQuery] int count = 10, CancellationToken cancellationToken = default)
+    public async Task<IResult> GetPaginatedFileMetadataAsync([FromQuery] int page = 1, [FromQuery] int count = 10, [FromQuery] string? category = null, CancellationToken cancellationToken = default)
     {
-        var result = await getPaginatedFileMetadata.ExecuteAsync(page, count, cancellationToken);
+        var result = await getPaginatedFileMetadata.ExecuteAsync(page, count, category, cancellationToken);
 
         return result.ToHttpResponse();
     }

@@ -31,4 +31,8 @@
         <InternalsVisibleTo Include="FileHub.API.Tests"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
 </Project>

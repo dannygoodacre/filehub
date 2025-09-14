@@ -13,7 +13,7 @@ public interface ITagRepository
     void AddRange(IEnumerable<Tag> tags);
 
     /// <summary>
-    /// Retrieve all tags with the given names, ignoring any that do not exist.
+    /// With tracking, retrieve all tags with the given names, ignoring any that do not exist.
     /// </summary>
     /// <param name="tagNames">The names of the tags.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while performing the operation.</param>

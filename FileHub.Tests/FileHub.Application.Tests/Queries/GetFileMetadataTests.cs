@@ -40,6 +40,12 @@ public class GetFileMetadataTests : TestBase
 
     private readonly DateTime _testCreatedAt = new DateTime(2020, 10, 12);
 
+    private readonly Category _testCategory = new()
+    {
+        Id = 123,
+        Name = "Test Category"
+    };
+
     private readonly List<Tag> _testTags =
     [
         new() { Id = 456, Name = "Test Tag 1" },
@@ -74,6 +80,7 @@ public class GetFileMetadataTests : TestBase
             StorageKey = TestStorageKey,
             ContentType = TestContentType,
             CreatedAt = _testCreatedAt,
+            Category = _testCategory,
             Tags = _testTags,
             UserId = TestUserId,
         };

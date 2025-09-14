@@ -42,6 +42,8 @@ public class FileControllerTests : TestBase
 
     private string _testName;
 
+    private string _testCategory;
+
     private List<string> _testTags;
 
     private string _testAccessLocation;
@@ -62,11 +64,13 @@ public class FileControllerTests : TestBase
 
     private Result<FileMetadata> _testGetFileMetadataResult;
 
-    private int _testPage;
+    private int _requestPage;
 
-    private int _testPageSize;
+    private int _requestPageSize;
 
-    private int _testCount;
+    private int _requestCount;
+
+    private string? _requestCategoryName;
 
     private int _testFilePageCount;
 
@@ -111,12 +115,15 @@ public class FileControllerTests : TestBase
 
         _testName = "Test Name";
 
+        _testCategory = "Test Category";
+
         _testTags = ["Test Tag 1", "Test Tag 2", "Test Tag 3"];
 
         _uploadFileRequest = new UploadFileRequest
         {
             File = _testFile,
             Name = _testName,
+            Category = _testCategory,
             Tags = _testTags,
         };
 
@@ -140,6 +147,7 @@ public class FileControllerTests : TestBase
         {
             Id = _testFileId,
             Name = _testName,
+            Category = _testCategory,
             Tags = _testTags,
             AccessLocation = _testAccessLocation,
             CreatedAt = _testCreatedAt,
@@ -157,6 +165,7 @@ public class FileControllerTests : TestBase
                 AccessLocation = "Test Access Location 1",
                 CreatedAt = new DateTime(2025, 12, 12),
                 ContentType = "Test Content Type 1",
+                Category = _testCategory,
                 Tags = ["Test Tag 1", "Test Tag 2", "Test Tag 3"]
             },
             new FileMetadata
@@ -166,15 +175,18 @@ public class FileControllerTests : TestBase
                 AccessLocation = "Test Access Location 2",
                 CreatedAt = new DateTime(2024, 9, 8),
                 ContentType = "Test Content Type 2",
+                Category = _testCategory,
                 Tags = ["Test Tag 4", "Test Tag 5"]
             }
         ];
 
-        _testPage = 1;
+        _requestPage = 1;
 
-        _testPageSize = 5;
+        _requestPageSize = 5;
 
-        _testCount = 2;
+        _requestCount = 2;
+        
+        _requestCategoryName = "Test Category";
 
         _testGetPaginatedFileMetadataResult = Result<List<FileMetadata>>.Success(_testFileMetadataList);
 
@@ -299,7 +311,7 @@ public class FileControllerTests : TestBase
         Setup_GetFilePageCount_ExecuteAsync();
 
         // Act
-        var result = await _controller.GetFilePageCountAsync(_testPageSize, _testCancellationToken);
+        var result = await _controller.GetFilePageCountAsync(_requestPageSize, _testCancellationToken);
 
         // Assert
         Assert.That(result, Is.EqualTo(Results.InternalServerError()));
@@ -312,7 +324,7 @@ public class FileControllerTests : TestBase
         Setup_GetFilePageCount_ExecuteAsync();
 
         // Act
-        var result = await _controller.GetFilePageCountAsync(_testPageSize, _testCancellationToken);
+        var result = await _controller.GetFilePageCountAsync(_requestPageSize, _testCancellationToken);
 
         // Assert
         Assert.That(result, Is.EqualTo(Results.Ok(_testFilePageCount)).UsingPropertiesComparer());
@@ -327,7 +339,7 @@ public class FileControllerTests : TestBase
         Setup_GetPaginatedFilesMetadata_ExecuteAsync();
 
         // Act
-        var result = await _controller.GetPaginatedFileMetadataAsync(_testPage, _testCount, _testCancellationToken);
+        var result = await _controller.GetPaginatedFileMetadataAsync(_requestPage, _requestCount, _requestCategoryName, _testCancellationToken);
 
         // Assert
         Assert.That(result, Is.EqualTo(Results.InternalServerError()));
@@ -340,7 +352,7 @@ public class FileControllerTests : TestBase
         Setup_GetPaginatedFilesMetadata_ExecuteAsync();
 
         // Act
-        var result = await _controller.GetPaginatedFileMetadataAsync(_testPage, _testCount, _testCancellationToken);
+        var result = await _controller.GetPaginatedFileMetadataAsync(_requestPage, _requestCount, _requestCategoryName, _testCancellationToken);
 
         // Assert
         Assert.That(result, Is.EqualTo(Results.Ok(_testFileMetadataList)).UsingPropertiesComparer());
@@ -363,6 +375,7 @@ public class FileControllerTests : TestBase
                 It.Is<string>(y => y == _testFileName),
                 It.Is<string>(y => y == _testName),
                 It.Is<int>(y => y == _testUserId),
+                It.Is<string>(y => y == _testCategory),
                 It.Is<List<string>>(y => y == _testTags),
                 It.Is<CancellationToken>(y => y == _testCancellationToken)))
             .ReturnsAsync(_testAddFileResult)
@@ -393,7 +406,7 @@ public class FileControllerTests : TestBase
     {
         _mockGetFilePageCount
             .Setup(x => x.ExecuteAsync(
-                It.Is<int>(y => y == _testPageSize),
+                It.Is<int>(y => y == _requestPageSize),
                 It.Is<CancellationToken>(y => y == _testCancellationToken)
             ))
             .ReturnsAsync(_testGetFilePageCountResult)
@@ -404,8 +417,9 @@ public class FileControllerTests : TestBase
     {
         _mockGetPaginatedFileMetadata
             .Setup(x => x.ExecuteAsync(
-                It.Is<int>(y => y == _testPage),
-                It.Is<int>(y => y == _testCount),
+                It.Is<int>(y => y == _requestPage),
+                It.Is<int>(y => y == _requestCount),
+                It.Is<string>(y => y == _requestCategoryName),
                 It.Is<CancellationToken>(y => y == _testCancellationToken)))
             .ReturnsAsync(_testGetPaginatedFileMetadataResult)
             .Verifiable(Times.Exactly(times));
