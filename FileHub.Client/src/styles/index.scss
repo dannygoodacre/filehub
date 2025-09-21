@@ -1,0 +1,40 @@
+@use '@styles/colors';
+
+:root {
+    font-family: Inter, sans-serif;
+    font-synthesis: none;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    background-color: colors.$bg;
+    color: colors.$text;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 500;
+
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    transition: border-color 0.25s;
+
+    cursor: pointer;
+
+    &:focus,
+    &:focus-visible {
+        outline: 4px auto -webkit-focus-ring-color;
+    }
+}

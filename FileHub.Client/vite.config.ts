@@ -1,21 +1,16 @@
-import tailwindcss from '@tailwindcss/vite';
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
-import { readFileSync } from 'fs';
-
-const isDevelopment = process.env.NODE_ENV !== 'production';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path';
 
 export default defineConfig({
-    plugins: [sveltekit(), tailwindcss()],
+    plugins: [react()],
     server: {
-        host: '0.0.0.0',
-        port: 3001,
-        https: isDevelopment ? {
-            key: readFileSync('../certs/key.pem'),
-            cert: readFileSync('../certs/cert.pem')
-        } : undefined
+        port: 3001
     },
-    build: {
-        target: 'esnext'
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+            '@styles': path.resolve(__dirname, 'src/styles')
+        }
     }
-});
+})
