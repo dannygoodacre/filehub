@@ -1,103 +1,91 @@
-@use '@/styles/colors';
+@use "@/styles/colors";
 
 .container {
-    max-width: 20rem;
-    width: 100%;
+  width: 100%;
+  max-width: 20rem;
 }
 
 .form {
-    padding: 1rem 2rem 2rem;
-    margin-bottom: 1rem;
-
-    border-radius: 0.5rem;
-    background-color: colors.$form-bg;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  padding: 1rem 2rem 2rem;
+  background-color: colors.$component-bg;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 10%),
+    0 1px 2px -1px rgb(0 0 0 / 10%);
+  margin-bottom: 1rem;
 }
 
 .title {
-    margin-bottom: 1.5rem;
-
-    font-size: 1.5rem;
-    font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
 }
 
 .form_field {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 
-    label {
-        display: block;
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
 
-        margin-bottom: 0.5rem;
+  input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid colors.$input-border;
+    line-height: 1.25;
+    box-sizing: border-box;
+  }
 
-        font-size: 0.875rem;
-        font-weight: 700;
-        line-height: 1.25rem;
-    }
-
+  &_error {
     input {
-        box-sizing: border-box;
-        padding: 0.5rem 0.75rem;
-        width: 100%;
-
-        line-height: 1.25;
-
-        border-radius: 0.5rem;
-        border: 1px solid colors.$input-border;
+      border-color: colors.$input-error;
     }
+  }
 
-    &_error {
-        input {
-            border-color: colors.$input-error;
-        }
-    }
-
-    p {
-        margin-top: 0;
-
-        font-size: 0.75rem;
-        font-style: italic;
-
-        color: colors.$input-error;
-    }
+  p {
+    font-size: 0.75rem;
+    color: colors.$input-error;
+    font-style: italic;
+    margin-top: 0;
+  }
 }
 
 .button {
-    margin-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
-    width: 100%;
+  width: 100%;
+  color: colors.$primary-btn-text;
+  background-color: colors.$primary-btn-bg;
+  margin-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
 
-    background-color: colors.$btn-bg;
-    border-radius: 0.5rem;
-    color: colors.$btn-text;
-
-    &:hover {
-        background-color: colors.$btn-bg-hover;
-    }
+  &:hover {
+    background-color: colors.$primary-btn-bg-hover;
+  }
 }
 
 .alert {
-    padding: 0.75rem 1rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  border-style: solid;
+  border-width: 1px;
 
-    text-align: center;
+  &_success {
+    @extend .alert;
 
-    border-radius: 0.5rem;
-    border-style: solid;
-    border-width: 1px;
+    color: colors.$alert-success-text;
+    background-color: colors.$alert-success-bg;
+    border-color: colors.$alert-success-border;
+  }
 
-    &_success {
-        @extend .alert;
+  &_failure {
+    @extend .alert;
 
-        background-color: colors.$alert-success-bg;
-        border-color: colors.$alert-success-border;
-        color: colors.$alert-success-text;
-    }
-
-    &_failure {
-        @extend .alert;
-
-        background-color: colors.$alert-failure-bg;
-        border-color: colors.$alert-failure-border;
-        color: colors.$alert-failure-text;
-    }
+    color: colors.$alert-failure-text;
+    background-color: colors.$alert-failure-bg;
+    border-color: colors.$alert-failure-border;
+  }
 }

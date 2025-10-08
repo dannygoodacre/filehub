@@ -1,0 +1,33 @@
+@use "@styles/colors";
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.icon_outer_container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon_inner_container {
+  display: flex;
+  width: auto;
+  height: 33.3333%;
+  align-items: center;
+  justify-content: center;
+}
+
+.file_icon {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  color: colors.$zinc-600;
+  align-items: center;
+  justify-content: center;
+}

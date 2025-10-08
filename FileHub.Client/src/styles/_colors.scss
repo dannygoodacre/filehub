@@ -1,33 +1,56 @@
+$zinc-50: #fafafa;
+$zinc-100: #f4f4f5;
+$zinc-200: #e4e4e7;
+$zinc-300: #d4d4d8;
+$zinc-400: #9f9fa9;
+$zinc-500: #71717b;
+$zinc-600: #52525c;
+$zinc-700: #3f3f46;
+$zinc-800: #27272a;
+$zinc-900: #18181b;
+$zinc-950: #09090b;
+$blue-50: #eff6ff;
+$blue-100: #dbeafe;
+$blue-200: #bedbff;
+$blue-300: #8ec5ff;
+$blue-400: #51a2ff;
+$blue-500: #2b7fff;
+$blue-600: #155dfc;
+$blue-700: #1447e6;
+$blue-800: #193cb8;
+$blue-900: #1c398e;
+$blue-950: #162456;
+
+// Core
+$bg: $zinc-50;
+$component-bg: white;
+$text: $zinc-800;
+$input-border: $zinc-300;
+
+// Alert
 $alert-failure-text: #c10007;
 $alert-failure-bg: #ffe2e2;
 $alert-failure-border: #ff6467;
-
 $alert-success-text: #008236;
 $alert-success-bg: #f0fdf4;
 $alert-success-border: #05df72;
-
-$bg: #fafafa;
-
-$btn-text: white;
-$btn-bg: #2563eb;
-$btn-bg-hover: #1d4ed8;
-
-$form-bg: white;
-
-$input-border: #d4d4d8;
 $input-error: #ef4444;
 
-$navbar-bg: #18181b;
+// Button
+$primary-btn-text: white;
+$primary-btn-bg: $blue-600;
+$primary-btn-bg-hover: $blue-700;
+$primary-btn-bg-hover-disabled: $blue-600;
+$secondary-btn-text: $zinc-700;
+$secondary-btn-bg: $zinc-200;
+$secondary-btn-bg-hover: $zinc-300;
 
-$navbar-btn-text: #99a1af;
-$navbar-btn-bg: #27272a;
-$navbar-btn-hover: #3f3f46;
-
-$navbar-link-text: #364153;
-$navbar-link-hover: #99a1af;
-
-$navbar-title: #f4f4f5;
-
-$navbar-username: #99a1af;
-
-$text: #27272a;
+// Navbar
+$navbar-bg: $zinc-900;
+$navbar-btn-bg: $zinc-800;
+$navbar-btn-hover: $zinc-700;
+$navbar-btn-text: $zinc-400;
+$navbar-link-text: $zinc-700;
+$navbar-link-hover: $zinc-400;
+$navbar-title: $zinc-100;
+$navbar-username: $zinc-400;

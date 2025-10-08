@@ -1,40 +1,42 @@
-@use '@styles/colors';
+@use "@styles/colors";
 
 :root {
-    font-family: Inter, sans-serif;
-    font-synthesis: none;
-    line-height: 1.5;
-    text-rendering: optimizeLegibility;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  font-family: Inter, sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
 }
 
 html,
 body {
-    margin: 0;
-    padding: 0;
-
-    background-color: colors.$bg;
-    color: colors.$text;
+  margin: 0;
+  padding: 0;
+  color: colors.$text;
+  background-color: colors.$bg;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 button {
-    font-family: inherit;
-    font-size: 1em;
-    font-weight: 500;
+  border: 1px solid transparent;
+  font-size: 1em;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.25s;
 
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
-    transition: border-color 0.25s;
+  &:focus,
+  &:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
+}
 
-    cursor: pointer;
-
-    &:focus,
-    &:focus-visible {
-        outline: 4px auto -webkit-focus-ring-color;
-    }
+input {
+  border: 1px solid colors.$input-border;
+  border-radius: 0.5rem;
 }
