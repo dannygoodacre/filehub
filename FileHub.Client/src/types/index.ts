@@ -1,2 +1,2 @@
-export type { FileMetadata } from "./FileMetadata";
-export type { UserInfo } from "./UserInfo";
+export type { FileMetadata } from './FileMetadata';
+export type { UserInfo } from './UserInfo';

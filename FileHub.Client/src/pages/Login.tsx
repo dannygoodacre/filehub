@@ -1,6 +1,6 @@
-import styles from "./Login.module.scss";
+import styles from './Login.module.scss';
 
-import { NavBar, LoginBox } from "@/components";
+import { NavBar, LoginBox } from '@/components';
 
 export default function Login() {
   return (

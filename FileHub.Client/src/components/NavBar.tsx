@@ -1,8 +1,8 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import styles from "./NavBar.module.scss";
+import styles from './NavBar.module.scss';
 
-import { useLogout, useAuth } from "@/hooks";
+import { useLogout, useAuth } from '@/hooks';
 
 export default function NavBar() {
   const logoutMutation = useLogout();
@@ -42,8 +42,8 @@ export default function NavBar() {
       </Link>
 
       <div className={styles.right}>
-        {location.pathname !== "/login" && (
-          <button className="login" onClick={() => navigate("/login")}>
+        {location.pathname !== '/login' && (
+          <button className="login" onClick={() => navigate('/login')}>
             Login
           </button>
         )}

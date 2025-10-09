@@ -1,6 +1,6 @@
-import styles from "./Upload.module.scss";
+import styles from './Upload.module.scss';
 
-import { NavBar, UploadBox } from "@/components";
+import { NavBar, UploadBox } from '@/components';
 
 export default function Upload() {
   return (

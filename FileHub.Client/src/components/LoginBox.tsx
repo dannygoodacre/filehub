@@ -1,12 +1,12 @@
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useState } from 'react';
 
-import styles from "./LoginBox.module.scss";
+import styles from './LoginBox.module.scss';
 
-import { useLogin, useAuth } from "@/hooks";
+import { useLogin, useAuth } from '@/hooks';
 
 export default function LoginBox() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const [showUsernameError, setShowUsernameError] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
@@ -15,8 +15,8 @@ export default function LoginBox() {
   const { data: user } = useAuth();
 
   const clearInputs = () => {
-    setUsername("");
-    setPassword("");
+    setUsername('');
+    setPassword('');
   };
 
   const clearErrors = () => {
@@ -61,9 +61,7 @@ export default function LoginBox() {
       <form className={styles.form} onSubmit={handleLogin}>
         <h1 className={styles.title}>Login</h1>
 
-        <div
-          className={`${styles.form_field} ${showUsernameError ? styles.input_box_error : ""}`}
-        >
+        <div className={`${styles.form_field} ${showUsernameError ? styles.input_box_error : ''}`}>
           <label>Username</label>
           <input
             value={username}
@@ -76,9 +74,7 @@ export default function LoginBox() {
           {showUsernameError && <p>Please enter a username</p>}
         </div>
 
-        <div
-          className={`${styles.form_field} ${showPasswordError ? styles.input_box_error : ""}`}
-        >
+        <div className={`${styles.form_field} ${showPasswordError ? styles.input_box_error : ''}`}>
           <label>Password</label>
           <input
             value={password}
@@ -92,7 +88,7 @@ export default function LoginBox() {
         </div>
 
         <button className={styles.button} type="submit">
-          {login.isPending ? "Logging in..." : "Login"}
+          {login.isPending ? 'Logging in...' : 'Login'}
         </button>
       </form>
 

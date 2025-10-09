@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { ChevronLeft, ChevronRight } from "react-feather";
+import { ChevronLeft, ChevronRight } from 'react-feather';
 
-import styles from "./Home.module.scss";
+import styles from './Home.module.scss';
 
-import { NavBar, FileCardGrid } from "@/components";
-import { usePageCount } from "@/hooks/usePageCount";
-import { usePaginatedFileMetadata } from "@/hooks/usePaginatedFileMetadata";
+import { NavBar, FileCardGrid } from '@/components';
+import { usePageCount } from '@/hooks/usePageCount';
+import { usePaginatedFileMetadata } from '@/hooks/usePaginatedFileMetadata';
 
 export default function Home() {
   const pageSize = 15;
@@ -17,17 +17,11 @@ export default function Home() {
   const pageCount = usePageCount(pageSize);
   const fileMetadata = usePaginatedFileMetadata(page, pageSize);
 
-  let buttonLabels: number[] = Array.from(
-    { length: pageCount.data! },
-    (_, i) => i + 1,
-  );
+  let buttonLabels: number[] = Array.from({ length: pageCount.data! }, (_, i) => i + 1);
 
   let start = Math.max(
     0,
-    Math.min(
-      pageCount.data! - maxVisiblePageButtons,
-      page - Math.floor(maxVisiblePageButtons / 2) - 1,
-    ),
+    Math.min(pageCount.data! - maxVisiblePageButtons, page - Math.floor(maxVisiblePageButtons / 2) - 1),
   );
 
   let end = Math.min(pageCount.data!, start + maxVisiblePageButtons);
@@ -45,11 +39,7 @@ export default function Home() {
           </div>
 
           <div className={styles.nav_button_container}>
-            <button
-              className={styles.nav_button}
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
-            >
+            <button className={styles.nav_button} onClick={() => setPage(page - 1)} disabled={page === 1}>
               <ChevronLeft />
             </button>
 
@@ -57,19 +47,14 @@ export default function Home() {
               {visibleButtonLabels.map((label, index) => (
                 <button
                   key={index}
-                  className={`${styles.page_button} ${label == page ? styles.current_page_button : ""}`}
-                  onClick={() => setPage(label)}
-                >
+                  className={`${styles.page_button} ${label == page ? styles.current_page_button : ''}`}
+                  onClick={() => setPage(label)}>
                   {label}
                 </button>
               ))}
             </div>
 
-            <button
-              className={styles.nav_button}
-              onClick={() => setPage(page + 1)}
-              disabled={page === pageCount.data}
-            >
+            <button className={styles.nav_button} onClick={() => setPage(page + 1)} disabled={page === pageCount.data}>
               <ChevronRight />
             </button>
           </div>

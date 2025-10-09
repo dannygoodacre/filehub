@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Upload, File as FileIcon, X } from "react-feather";
+import { Upload, File as FileIcon, X } from 'react-feather';
 
-import styles from "./UploadBox.module.scss";
+import styles from './UploadBox.module.scss';
 
-import { useUpload } from "@/hooks";
+import { useUpload } from '@/hooks';
 
 export default function UploadBox() {
   const [file, setFile] = useState<File | null>(null);
 
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>('');
 
   const [tags, setTags] = useState<string[]>([]);
 
-  const [tagInput, setTagInput] = useState<string>("");
+  const [tagInput, setTagInput] = useState<string>('');
 
   const upload = useUpload();
 
@@ -45,9 +45,9 @@ export default function UploadBox() {
 
   function removeFile() {
     setFile(null);
-    setName("");
+    setName('');
     setTags([]);
-    setTagInput("");
+    setTagInput('');
   }
 
   function addTag() {
@@ -55,7 +55,7 @@ export default function UploadBox() {
 
     if (tag && !tags.includes(tag)) {
       setTags([...tags, tag]);
-      setTagInput("");
+      setTagInput('');
     }
   }
 
@@ -64,14 +64,14 @@ export default function UploadBox() {
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       addTag();
     }
   }
 
   function fileSize(size: number): string {
-    const units = ["B", "KB", "MB", "GB"];
+    const units = ['B', 'KB', 'MB', 'GB'];
 
     let i = 0;
     while (size >= 1000 && i < units.length - 1) {
@@ -88,11 +88,7 @@ export default function UploadBox() {
         <h1 className={styles.title}>Upload</h1>
 
         <div className={styles.upload_box}>
-          <input
-            type="file"
-            onChange={(e) => handleFileSelect(e)}
-            onClick={() => upload.reset()}
-          />
+          <input type="file" onChange={(e) => handleFileSelect(e)} onClick={() => upload.reset()} />
           <div>
             <Upload className={styles.upload_icon} size={48} />
             <p>Drop a file here or click to browse</p>
@@ -115,23 +111,14 @@ export default function UploadBox() {
             </div>
 
             <div className={styles.name_input_container}>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                type="text"
-                placeholder="Name"
-              />
+              <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Name" />
             </div>
 
             <div>
               {tags.length > 0 && (
                 <div className={styles.tags_box}>
                   {tags.map((tag, i) => (
-                    <button
-                      key={i}
-                      onClick={() => removeTag(i)}
-                      title="Remove tag"
-                    >
+                    <button key={i} onClick={() => removeTag(i)} title="Remove tag">
                       {tag}
                     </button>
                   ))}
@@ -150,12 +137,8 @@ export default function UploadBox() {
               </div>
             </div>
 
-            <button
-              className={styles.upload_btn}
-              onClick={handleUpload}
-              disabled={!canUpload}
-            >
-              {upload.isPending ? "Uploading" : "Upload"}
+            <button className={styles.upload_btn} onClick={handleUpload} disabled={!canUpload}>
+              {upload.isPending ? 'Uploading' : 'Upload'}
             </button>
           </>
         )}
