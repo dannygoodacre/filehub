@@ -1,14 +1,15 @@
-import styles from "./Home.module.scss";
-
 import { useState } from "react";
-import { NavBar, FileCardGrid } from "@/components";
 
 import { ChevronLeft, ChevronRight } from "react-feather";
-import { usePaginatedFileMetadata } from "@/hooks/usePaginatedFileMetadata";
+
+import styles from "./Home.module.scss";
+
+import { NavBar, FileCardGrid } from "@/components";
 import { usePageCount } from "@/hooks/usePageCount";
+import { usePaginatedFileMetadata } from "@/hooks/usePaginatedFileMetadata";
 
 export default function Home() {
-  const pageSize = 12;
+  const pageSize = 15;
   const maxVisiblePageButtons = 5;
 
   const [page, setPage] = useState<number>(1);

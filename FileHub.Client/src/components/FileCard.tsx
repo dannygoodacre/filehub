@@ -1,7 +1,7 @@
 import styles from "./FileCard.module.scss";
 
-import { FileMetadata } from "@/types";
 import { FileThumbnail } from "@/components/index";
+import { FileMetadata } from "@/types";
 
 type FileCardProps = {
   fileMetadata: FileMetadata;
@@ -25,7 +25,7 @@ export default function FileCard({ fileMetadata }: FileCardProps) {
       </div>
 
       <div className={styles.tags_container}>
-        {fileMetadata.tags.map((tag, index) => (
+        {fileMetadata.tags.map((tag: FileMetadata, index: number) => (
           <span key={index}>{tag}</span>
         ))}
       </div>

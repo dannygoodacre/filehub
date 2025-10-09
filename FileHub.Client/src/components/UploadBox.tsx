@@ -1,15 +1,19 @@
-import styles from "./UploadBox.module.scss";
-
 import React, { useState } from "react";
+
 import { Upload, File as FileIcon, X } from "react-feather";
+
+import styles from "./UploadBox.module.scss";
 
 import { useUpload } from "@/hooks";
 
 export default function UploadBox() {
   const [file, setFile] = useState<File | null>(null);
+
   const [name, setName] = useState<string>("");
-  const [tagInput, setTagInput] = useState<string>("");
+
   const [tags, setTags] = useState<string[]>([]);
+
+  const [tagInput, setTagInput] = useState<string>("");
 
   const upload = useUpload();
 
@@ -20,9 +24,14 @@ export default function UploadBox() {
       return;
     }
 
-    upload.mutate({ file, name, tags });
-
-    removeFile();
+    upload.mutate(
+      { file, name, tags },
+      {
+        onSuccess: () => {
+          removeFile();
+        },
+      },
+    );
   }
 
   function handleFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
@@ -146,7 +155,7 @@ export default function UploadBox() {
               onClick={handleUpload}
               disabled={!canUpload}
             >
-              Upload
+              {upload.isPending ? "Uploading" : "Upload"}
             </button>
           </>
         )}

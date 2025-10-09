@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import type UserInfo from "@/types/UserInfo";
+import type { UserInfo } from "@/types/UserInfo";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

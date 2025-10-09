@@ -2,32 +2,33 @@
 
 img {
   display: block;
-  width: 100%;
   height: 100%;
+  width: 100%;
   object-fit: cover;
 }
 
 .icon_outer_container {
-  display: flex;
-  width: 100%;
-  height: 100%;
   align-items: center;
+  display: flex;
+  height: 100%;
   justify-content: center;
+  width: 100%;
 }
 
 .icon_inner_container {
-  display: flex;
-  width: auto;
-  height: 33.3333%;
   align-items: center;
+  display: flex;
+  height: 33.3333%;
   justify-content: center;
+  width: auto;
 }
 
 .file_icon {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  color: colors.$zinc-600;
   align-items: center;
+  display: flex;
+  height: 100%;
   justify-content: center;
+  width: 100%;
+
+  color: colors.$zinc-600;
 }

@@ -1,6 +1,6 @@
-import styles from "./LoginBox.module.scss";
-
 import { type FormEvent, useState } from "react";
+
+import styles from "./LoginBox.module.scss";
 
 import { useLogin, useAuth } from "@/hooks";
 
@@ -11,7 +11,7 @@ export default function LoginBox() {
   const [showUsernameError, setShowUsernameError] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
 
-  const loginMutation = useLogin();
+  const login = useLogin();
   const { data: user } = useAuth();
 
   const clearInputs = () => {
@@ -23,7 +23,7 @@ export default function LoginBox() {
     setShowUsernameError(false);
     setShowPasswordError(false);
 
-    loginMutation.reset();
+    login.reset();
   };
 
   const handleLogin = (event: FormEvent) => {
@@ -47,7 +47,7 @@ export default function LoginBox() {
       return;
     }
 
-    loginMutation.mutate(
+    login.mutate(
       { username, password },
       {
         onSuccess: clearInputs,
@@ -68,7 +68,7 @@ export default function LoginBox() {
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            onClick={() => loginMutation.reset()}
+            onClick={() => login.reset()}
             onInput={() => clearErrors()}
             type="text"
             placeholder="Username"
@@ -83,7 +83,7 @@ export default function LoginBox() {
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            onClick={() => loginMutation.reset()}
+            onClick={() => login.reset()}
             onInput={() => clearErrors()}
             type="password"
             placeholder="**********"
@@ -92,16 +92,16 @@ export default function LoginBox() {
         </div>
 
         <button className={styles.button} type="submit">
-          {loginMutation.isPending ? "Logging in..." : "Login"}
+          {login.isPending ? "Logging in..." : "Login"}
         </button>
       </form>
 
-      {loginMutation.isSuccess && user && (
+      {login.isSuccess && user && (
         <div className={styles.alert_success} role="alert">
           <span>Login successful</span>
         </div>
       )}
-      {loginMutation.isError && (
+      {login.isError && (
         <div className={styles.alert_failure} role="alert">
           <span>Login failed</span>
         </div>

@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { Login, Home, Upload } from "@/pages";
 import { ProtectedRoute } from "@/components";
+import { Login, Home, Upload } from "@/pages";
 
 export default function App() {
   const queryClient = new QueryClient();

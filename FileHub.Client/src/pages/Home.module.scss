@@ -6,24 +6,27 @@
 }
 
 .nav_button_container {
-  position: fixed;
-  right: 0;
   bottom: 0;
   left: 0;
-  display: flex;
-  margin: 2rem 1rem;
+  position: fixed;
+  right: 0;
+
   align-items: center;
+
+  display: flex;
   justify-content: center;
+  margin: 2rem 1rem;
 }
 
 .nav_button {
   display: flex;
   padding: 0.25rem 0.5rem;
+
   color: colors.$secondary-btn-text;
 
   &:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
   }
 }
 
@@ -33,13 +36,14 @@
 }
 
 .page_button {
+  align-items: center;
   display: flex;
-  width: 2rem;
+  justify-content: center;
   margin: 0.1rem;
   padding: 0.25rem 0.5rem;
+  width: 2rem;
+
   color: colors.$secondary-btn-text;
-  align-items: center;
-  justify-content: center;
 }
 
 .current_page_button {

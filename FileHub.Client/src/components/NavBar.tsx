@@ -1,6 +1,6 @@
-import styles from "./NavBar.module.scss";
-
 import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import styles from "./NavBar.module.scss";
 
 import { useLogout, useAuth } from "@/hooks";
 

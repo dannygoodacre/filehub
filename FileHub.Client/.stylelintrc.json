@@ -2,23 +2,53 @@
   "extends": ["stylelint-config-standard-scss"],
   "plugins": ["stylelint-scss", "stylelint-order"],
   "rules": {
+    "declaration-empty-line-before": null,
     "order/properties-order": [
       [
         {
           "groupName": "positioning",
-          "properties": ["position", "top", "right", "bottom", "left", "z-index"]
+          "emptyLineBefore": "always",
+          "properties": [
+            "bottom", "clear", "clip", "float", "left", "position", "right", "top", "z-index"
+          ]
         },
         {
           "groupName": "box-model",
-          "properties": ["display", "width", "height", "margin", "padding", "border", "overflow"]
+          "emptyLineBefore": "always",
+          "properties": [
+            "align-items", "border", "border-bottom", "border-bottom-color", "border-bottom-style",
+            "border-bottom-width", "border-color", "border-left", "border-left-color", "border-left-style",
+            "border-left-width", "border-radius", "border-right", "border-right-color", "border-right-style",
+            "border-right-width", "border-style", "border-top", "border-top-color", "border-top-style",
+            "border-top-width", "border-width", "box-sizing", "column-gap", "display", "gap", "height",
+            "justify-content", "margin", "margin-bottom", "margin-left", "margin-right", "margin-top",
+            "max-height", "max-width", "min-height", "min-width", "outline", "outline-color", "outline-style",
+            "outline-width", "overflow", "overflow-x", "overflow-y", "padding", "padding-bottom",
+            "padding-left", "padding-right", "padding-top", "row-gap", "visibility", "width"
+          ]
         },
         {
           "groupName": "typography",
-          "properties": ["font", "font-size", "font-weight", "line-height", "text-align", "color"]
+          "emptyLineBefore": "always",
+          "properties": [
+            "color", "direction", "font", "font-family", "font-size", "font-style", "font-variant",
+            "font-weight", "letter-spacing", "line-height", "text-align", "text-decoration",
+            "text-overflow", "text-transform", "unicode-bidi", "white-space", "word-break",
+            "word-spacing", "word-wrap"
+          ]
         },
         {
           "groupName": "visual",
-          "properties": ["background", "background-color", "box-shadow", "opacity"]
+          "emptyLineBefore": "always",
+          "properties": [
+            "animation", "animation-delay", "animation-direction", "animation-duration",
+            "animation-fill-mode", "animation-iteration-count", "animation-name",
+            "animation-timing-function", "background", "background-attachment", "background-clip",
+            "background-color", "background-image", "background-origin", "background-position",
+            "background-repeat", "background-size", "box-shadow", "cursor", "filter", "opacity",
+            "pointer-events", "resize", "transform", "transition", "transition-delay",
+            "transition-duration", "transition-property", "transition-timing-function", "user-select"
+          ]
         }
       ],
       {
@@ -29,7 +59,6 @@
     "selector-class-pattern": ["^[a-z0-9_]+$", {
       "message": "Class names should be snake_case"
     }],
-    "scss/at-extend-no-missing-placeholder": null,
     "no-descending-specificity": null
   }
 }

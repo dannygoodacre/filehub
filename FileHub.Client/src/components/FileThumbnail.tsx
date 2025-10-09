@@ -1,6 +1,6 @@
-import styles from "./FileThumbnail.module.scss";
+import { File, Film, Headphones } from "react-feather";
 
-import { File, Video, Headphones } from "react-feather";
+import styles from "./FileThumbnail.module.scss";
 
 type FileThumbnailProps = {
   name: string;
@@ -18,7 +18,7 @@ export default function FileThumbnail({
   const renderFileIcon = () => {
     switch (generalType) {
       case "video":
-        return <Video className={styles.file_icon} />;
+        return <Film className={styles.file_icon} />;
       case "audio":
         return <Headphones className={styles.file_icon} />;
       default:
