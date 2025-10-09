@@ -1,9 +1,9 @@
-export interface filemetadata {
+export interface FileMetadata {
   id: string;
   name: string;
   accessLocation: string;
   contentType: string;
-  createdAt: date;
+  createdAt: Date;
   uploader: string;
   tags: string[];
 }

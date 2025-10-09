@@ -4,6 +4,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import importPlugin from 'eslint-plugin-import';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
+import sortExportsPlugin from 'eslint-plugin-sort-exports';
 import globals from 'globals';
 
 export default defineConfig([
@@ -24,6 +25,7 @@ export default defineConfig([
       '@typescript-eslint': tsPlugin,
       'react-hooks': reactHooksPlugin,
       'react-refresh': reactRefreshPlugin,
+      'sort-exports': sortExportsPlugin,
     },
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
@@ -43,6 +45,15 @@ export default defineConfig([
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
+    },
+  },
+  {
+    files: ['**/index.ts', '**/index.tsx'], // only index files
+    plugins: {
+      'sort-exports': sortExportsPlugin,
+    },
+    rules: {
+      'sort-exports/sort-exports': ['error', { sortDir: 'asc' }],
     },
   },
 ]);

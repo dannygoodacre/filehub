@@ -1,4 +1,4 @@
-export interface userinfo {
+export interface UserInfo {
   username: string;
   isAccountConfirmed: boolean;
 }
