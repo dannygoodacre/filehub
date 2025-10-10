@@ -3,7 +3,7 @@ export interface FileMetadata {
   name: string;
   accessLocation: string;
   contentType: string;
-  createdAt: Date;
+  createdAt: string;
   uploader: string;
   tags: string[];
 }

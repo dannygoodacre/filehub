@@ -97,6 +97,7 @@ export default function LoginBox() {
           <span>Login successful</span>
         </div>
       )}
+
       {login.isError && (
         <div className={styles.alert_failure} role="alert">
           <span>Login failed</span>

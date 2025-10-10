@@ -23,7 +23,7 @@ export default function FileCard({ fileMetadata }: FileCardProps) {
       <div className={styles.content_type_container}>{fileMetadata.contentType}</div>
 
       <div className={styles.tags_container}>
-        {fileMetadata.tags.map((tag: FileMetadata, index: number) => (
+        {fileMetadata.tags.map((tag, index) => (
           <span key={index}>{tag}</span>
         ))}
       </div>
