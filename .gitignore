@@ -80,6 +80,7 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+dist/
 
 coverage_report/
 FileHub.Web/files/
