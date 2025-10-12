@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getPageCount } from '@/api/files/files';
+import { getPageCount } from '@/api';
 
 export default function usePageCount(size: number) {
   return useQuery({

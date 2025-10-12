@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getPaginatedFileMetadata } from '@/api/files/files';
+import { getPaginatedFileMetadata } from '@/api';
 
 export default function usePaginatedFileMetadata(page: number, size: number) {
   return useQuery({
