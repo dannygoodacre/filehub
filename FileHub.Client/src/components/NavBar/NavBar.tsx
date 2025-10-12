@@ -29,7 +29,7 @@ export default function NavBar() {
       </div>
 
       <div className={styles.right}>
-        <span className={styles.username}>{user?.username}</span>
+        <span className={styles.username}>{user.username}</span>
         <button className="logout" onClick={() => logoutMutation.mutate()}>
           Logout
         </button>

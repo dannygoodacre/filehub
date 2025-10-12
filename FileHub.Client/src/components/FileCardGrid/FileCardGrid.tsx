@@ -1,6 +1,6 @@
 import styles from './FileCardGrid.module.scss';
 
-import { FileCard } from '@/components/index';
+import { FileCard } from '@/components';
 import { FileMetadata } from '@/types';
 
 type FileCardGridProps = {

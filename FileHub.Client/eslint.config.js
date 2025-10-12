@@ -16,16 +16,16 @@ export default defineConfig([
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        ecmaFeatures: { jsx: true },
+        ecmaFeatures: { jsx: true }
       },
-      globals: globals.browser,
+      globals: globals.browser
     },
     plugins: {
       import: importPlugin,
       '@typescript-eslint': tsPlugin,
       'react-hooks': reactHooksPlugin,
       'react-refresh': reactRefreshPlugin,
-      'sort-exports': sortExportsPlugin,
+      'sort-exports': sortExportsPlugin
     },
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
@@ -38,22 +38,22 @@ export default defineConfig([
           groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'object', 'type'],
           pathGroups: [
             { pattern: 'react', group: 'builtin', position: 'before' },
-            { pattern: 'src/**', group: 'internal', position: 'after' },
+            { pattern: 'src/**', group: 'internal', position: 'after' }
           ],
           pathGroupsExcludedImportTypes: ['react'],
           'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
-        },
-      ],
-    },
+          alphabetize: { order: 'asc', caseInsensitive: true }
+        }
+      ]
+    }
   },
   {
     files: ['**/index.ts', '**/index.tsx'], // only index files
     plugins: {
-      'sort-exports': sortExportsPlugin,
+      'sort-exports': sortExportsPlugin
     },
     rules: {
-      'sort-exports/sort-exports': ['error', { sortDir: 'asc' }],
-    },
-  },
+      'sort-exports/sort-exports': ['error', { sortDir: 'asc' }]
+    }
+  }
 ]);

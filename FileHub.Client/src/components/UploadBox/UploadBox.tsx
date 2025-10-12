@@ -29,8 +29,8 @@ export default function UploadBox() {
       {
         onSuccess: () => {
           removeFile();
-        },
-      },
+        }
+      }
     );
   }
 
@@ -88,11 +88,11 @@ export default function UploadBox() {
         <h1 className={styles.title}>Upload</h1>
 
         <div className={styles.upload_box}>
-          <input type="file" onChange={(e) => handleFileSelect(e)} onClick={() => upload.reset()} />
-          <div>
+          <input id="file-upload" type="file" onChange={(e) => handleFileSelect(e)} onClick={() => upload.reset()} />
+          <label htmlFor="file-upload">
             <Upload className={styles.upload_icon} size={48} />
             <p>Drop a file here or click to browse</p>
-          </div>
+          </label>
         </div>
 
         {file && (

@@ -1,6 +1,6 @@
 import styles from './FileCard.module.scss';
 
-import { FileThumbnail } from '@/components/index';
+import { FileThumbnail } from '@/components';
 import { FileMetadata } from '@/types';
 
 type FileCardProps = {

@@ -51,8 +51,8 @@ export default function LoginBox() {
       { username, password },
       {
         onSuccess: clearInputs,
-        onError: clearInputs,
-      },
+        onError: clearInputs
+      }
     );
   };
 
@@ -62,8 +62,9 @@ export default function LoginBox() {
         <h1 className={styles.title}>Login</h1>
 
         <div className={`${styles.form_field} ${showUsernameError ? styles.input_box_error : ''}`}>
-          <label>Username</label>
+          <label htmlFor="username">Username</label>
           <input
+            id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             onClick={() => login.reset()}
@@ -75,8 +76,9 @@ export default function LoginBox() {
         </div>
 
         <div className={`${styles.form_field} ${showPasswordError ? styles.input_box_error : ''}`}>
-          <label>Password</label>
+          <label htmlFor="password">Password</label>
           <input
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onClick={() => login.reset()}

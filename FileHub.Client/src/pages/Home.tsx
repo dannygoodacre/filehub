@@ -20,7 +20,7 @@ export default function Home() {
 
   let start = Math.max(
     0,
-    Math.min(pageCount.data! - maxVisiblePageButtons, page - Math.floor(maxVisiblePageButtons / 2) - 1),
+    Math.min(pageCount.data! - maxVisiblePageButtons, page - Math.floor(maxVisiblePageButtons / 2) - 1)
   );
 
   let end = Math.min(pageCount.data!, start + maxVisiblePageButtons);
