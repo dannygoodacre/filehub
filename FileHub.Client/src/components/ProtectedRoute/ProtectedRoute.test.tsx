@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Mock } from 'vitest';
 
+vi.mock('@/hooks');
+
 import { ProtectedRoute } from '@/components';
 import { useAuth } from '@/hooks';
 
@@ -17,8 +19,6 @@ const renderComponent = () => {
     </MemoryRouter>
   );
 };
-
-vi.mock('@/hooks/useAuth');
 
 describe('ProtectedRoute component', () => {
   it('renders correctly when logged out', () => {

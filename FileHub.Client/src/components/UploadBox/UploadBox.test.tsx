@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Mock } from 'vitest';
 
+vi.mock('@/hooks');
+
 import { UploadBox } from '@/components';
 import { useUpload } from '@/hooks';
 
@@ -20,8 +22,6 @@ const renderComponent = () => {
     </QueryClientProvider>
   );
 };
-
-vi.mock('@/hooks/useUpload');
 
 describe('UploadBox', () => {
   it('initial render', () => {

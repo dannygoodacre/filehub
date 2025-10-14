@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Mock } from 'vitest';
 
+vi.mock('@/hooks');
+
 import { LoginBox } from '@/components';
 import { useAuth, useLogin } from '@/hooks';
 import { UserInfo } from '@/types';
@@ -21,10 +23,6 @@ const renderComponent = () => {
     </QueryClientProvider>
   );
 };
-
-vi.mock('@/hooks/useAuth');
-
-vi.mock('@/hooks/useLogin');
 
 afterEach(() => {
   vi.clearAllMocks();

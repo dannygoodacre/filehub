@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import { Mock } from 'vitest';
 
+vi.mock('@/hooks');
+
 import { NavBar } from '@/components';
 import { useAuth } from '@/hooks';
 
@@ -22,8 +24,6 @@ const renderComponent = () => {
     </QueryClientProvider>
   );
 };
-
-vi.mock('@/hooks/useAuth');
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
