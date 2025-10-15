@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from 'react-feather';
 import styles from './Home.module.scss';
 
 import { NavBar, FileCardGrid } from '@/components';
-import { usePaginatedFileMetadata, usePageCount } from '@/hooks/';
+import { usePaginatedFileMetadata, usePageCount } from '@/hooks';
 
 export default function Home() {
   const pageSize = 15;
