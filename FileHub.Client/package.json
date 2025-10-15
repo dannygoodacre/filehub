@@ -47,7 +47,6 @@
     "vitest": "^3.2.4"
   },
   "description": "The FileHub web client",
-  "main": "eslint.config.js",
   "author": "Danny Goodacre",
   "license": "MIT"
 }
