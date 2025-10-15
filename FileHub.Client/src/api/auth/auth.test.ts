@@ -2,31 +2,31 @@ import { expect } from 'vitest';
 
 import { get, post } from '../client/client';
 
-import { getCurrentUser, login, logout } from '@/api';
-import { Credentials, UserInfo } from '@/types';
-
 vi.mock('../client/client', () => ({
   get: vi.fn(),
   post: vi.fn()
 }));
 
+import { getCurrentUser, login, logout } from '@/api';
+import { Credentials, UserInfo } from '@/types';
+
 describe('auth', () => {
   it('getCurrentUser', async () => {
     // Arrange
-    const mockUser: UserInfo = {
+    const userInfo: UserInfo = {
       username: 'test_username',
       isAccountConfirmed: true
     };
 
-    (get as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(mockUser);
+    (get as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(userInfo);
 
     // Act
     const result = await getCurrentUser();
 
     // Assert
-    expect(get).toHaveBeenCalledWith('/account/info');
+    expect(get).toHaveBeenNthCalledWith(1, '/account/info');
 
-    expect(result).toEqual(mockUser);
+    expect(result).toEqual(userInfo);
   });
 
   it('login', async () => {
@@ -36,31 +36,31 @@ describe('auth', () => {
       password: 'test_password'
     };
 
-    const mockResponse = { ok: true };
+    const response = { ok: true };
 
-    (post as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(mockResponse);
+    (post as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(response);
 
     // Act
     const result = await login(credentials);
 
     // Assert
-    expect(post).toHaveBeenCalledWith('/account/login', credentials);
+    expect(post).toHaveBeenNthCalledWith(1, '/account/login', credentials);
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(response);
   });
 
   it('logout', async () => {
     // Arrange
-    const mockResponse = { ok: true };
+    const response = { ok: true };
 
-    (post as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(mockResponse);
+    (post as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(response);
 
     // Act
     const result = await logout();
 
     // Assert
-    expect(post).toHaveBeenCalledWith('/account/logout');
+    expect(post).toHaveBeenNthCalledWith(1, '/account/logout');
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(response);
   });
 });

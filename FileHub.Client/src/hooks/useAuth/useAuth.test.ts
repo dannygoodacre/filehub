@@ -5,12 +5,12 @@ import { renderHook, waitFor } from '@testing-library/react';
 
 import useAuth from './useAuth';
 
-import { getCurrentUser } from '@/api';
-import { UserInfo } from '@/types';
-
 vi.mock('@/api', () => ({
   getCurrentUser: vi.fn()
 }));
+
+import { getCurrentUser } from '@/api';
+import { UserInfo } from '@/types';
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -33,8 +33,8 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-describe('NavBar component', () => {
-  it('renders correctly when logged out on home page', () => {
+describe('NavBar', () => {
+  it('renders correctly when logged out and on home page', () => {
     // Arrange
     (useLocation as Mock).mockReturnValue({
       pathname: '/'
@@ -61,7 +61,7 @@ describe('NavBar component', () => {
     expect(loginButton).toBeInTheDocument();
   });
 
-  it('renders correctly when logged out on login page', () => {
+  it('renders correctly when logged out and on login page', () => {
     // Arrange
     (useLocation as Mock).mockReturnValue({
       pathname: '/login'

@@ -2,30 +2,30 @@ import { describe, expect } from 'vitest';
 
 import { get, post } from '../client/client';
 
-import { getPageCount, getPaginatedFileMetadata, uploadFile } from '@/api';
-import { FileMetadata } from '@/types';
-
 vi.mock('../client/client', () => ({
   get: vi.fn(),
   post: vi.fn()
 }));
+
+import { getPageCount, getPaginatedFileMetadata, uploadFile } from '@/api';
+import { FileMetadata } from '@/types';
 
 describe('files', () => {
   it('getPageCount', async () => {
     // Arrange
     const size = 5;
 
-    const mockNumber = 3;
+    const number = 3;
 
-    (get as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(mockNumber);
+    (get as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(number);
 
     // Act
     const result = await getPageCount(size);
 
     // Assert
-    expect(get).toHaveBeenCalledWith(`/files/pagecount?pageSize=${size}`);
+    expect(get).toHaveBeenNthCalledWith(1, `/files/pagecount?pageSize=${size}`);
 
-    expect(result).toEqual(mockNumber);
+    expect(result).toEqual(number);
   });
 
   it('getPaginatedFileMetadata', async () => {
@@ -61,7 +61,7 @@ describe('files', () => {
     const result = await getPaginatedFileMetadata(page, size);
 
     // Assert
-    expect(get).toHaveBeenCalledWith(`/files?page=${page}&count=${size}`);
+    expect(get).toHaveBeenNthCalledWith(1, `/files?page=${page}&count=${size}`);
 
     expect(result).toEqual(mockFileMetadata);
   });
@@ -80,15 +80,15 @@ describe('files', () => {
     formData.append('name', name);
     tags.forEach((tag) => formData.append('tags', tag));
 
-    const mockResponse = true;
+    const response = true;
 
-    (post as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(mockResponse);
+    (post as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(response);
 
     // Act
     const result = await uploadFile(file, name, tags);
 
     // Assert
-    expect(post).toHaveBeenCalledWith('/files/upload', expect.any(FormData));
+    expect(post).toHaveBeenNthCalledWith(1, '/files/upload', expect.any(FormData));
 
     const actualFormData = (post as any).mock.calls[0][1] as FormData;
 
@@ -96,6 +96,6 @@ describe('files', () => {
     expect(actualFormData.get('name')).toBe(name);
     expect(actualFormData.getAll('tags')).toEqual(tags);
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(response);
   });
 });

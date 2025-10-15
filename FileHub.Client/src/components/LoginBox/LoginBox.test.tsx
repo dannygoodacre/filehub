@@ -28,7 +28,7 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('LoginBox component', () => {
+describe('LoginBox', () => {
   it('renders correctly', () => {
     // Arrange
     (useLogin as Mock).mockReturnValue({

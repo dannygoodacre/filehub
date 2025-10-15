@@ -4,7 +4,7 @@ import FileCard from './FileCard';
 
 import { FileMetadata } from '@/types';
 
-describe('FileCard component', () => {
+describe('FileCard', () => {
   it('renders correctly', () => {
     // Arrange
     const fileMetaData: FileMetadata = {

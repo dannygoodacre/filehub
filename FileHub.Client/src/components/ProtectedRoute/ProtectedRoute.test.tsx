@@ -20,7 +20,7 @@ const renderComponent = () => {
   );
 };
 
-describe('ProtectedRoute component', () => {
+describe('ProtectedRoute', () => {
   it('renders correctly when logged out', () => {
     // Arrange
     (useAuth as Mock).mockReturnValue({

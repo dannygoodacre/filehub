@@ -6,12 +6,12 @@ import { describe, it, expect, vi } from 'vitest';
 
 import usePaginatedFileMetadata from './usePaginatedFileMetadata';
 
-import { getPaginatedFileMetadata } from '@/api';
-import { FileMetadata } from '@/types';
-
 vi.mock('@/api', () => ({
   getPaginatedFileMetadata: vi.fn()
 }));
+
+import { getPaginatedFileMetadata } from '@/api';
+import { FileMetadata } from '@/types';
 
 const queryClient = new QueryClient();
 let wrapper: React.FC<{ children: React.ReactNode }>;

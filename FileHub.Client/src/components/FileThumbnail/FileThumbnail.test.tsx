@@ -12,7 +12,7 @@ vi.mock('react-feather', () => ({
   Headphones: () => <svg data-testid="headphone-icon" />
 }));
 
-describe('FileThumbnail component', () => {
+describe('FileThumbnail', () => {
   it('renders an image for image files', () => {
     // Arrange
     const name = 'test_name';

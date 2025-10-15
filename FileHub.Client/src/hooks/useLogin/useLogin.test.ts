@@ -5,13 +5,13 @@ import { renderHook, act, waitFor, RenderHookResult } from '@testing-library/rea
 
 import useLogin from './useLogin';
 
-import { login, getCurrentUser } from '@/api';
-import { UserInfo } from '@/types';
-
 vi.mock('@/api', () => ({
   login: vi.fn(),
   getCurrentUser: vi.fn()
 }));
+
+import { login, getCurrentUser } from '@/api';
+import { UserInfo } from '@/types';
 
 const queryClient = new QueryClient();
 let wrapper: React.FC<{ children: React.ReactNode }>;

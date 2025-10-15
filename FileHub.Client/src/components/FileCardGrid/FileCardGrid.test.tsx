@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { FileCardGrid } from '@/components';
 import { FileMetadata } from '@/types';
 
-describe('FileCardGrid component', () => {
+describe('FileCardGrid', () => {
   it('renders correctly', () => {
     // Arrange
     const fileMetadata: FileMetadata[] = [

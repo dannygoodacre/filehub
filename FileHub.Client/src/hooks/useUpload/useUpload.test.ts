@@ -5,11 +5,11 @@ import { renderHook, waitFor, RenderHookResult } from '@testing-library/react';
 
 import useUpload from './useUpload';
 
-import { uploadFile } from '@/api';
-
 vi.mock('@/api', () => ({
   uploadFile: vi.fn()
 }));
+
+import { uploadFile } from '@/api';
 
 const queryClient = new QueryClient();
 let wrapper: React.FC<{ children: React.ReactNode }>;

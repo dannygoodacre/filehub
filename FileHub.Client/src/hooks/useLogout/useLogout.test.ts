@@ -5,12 +5,12 @@ import { renderHook, waitFor, RenderHookResult } from '@testing-library/react';
 
 import useLogout from './useLogout';
 
-import { logout } from '@/api';
-import { UserInfo } from '@/types';
-
 vi.mock('@/api', () => ({
   logout: vi.fn()
 }));
+
+import { logout } from '@/api';
+import { UserInfo } from '@/types';
 
 const queryClient = new QueryClient();
 let wrapper: React.FC<{ children: React.ReactNode }>;

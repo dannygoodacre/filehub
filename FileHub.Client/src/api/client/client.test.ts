@@ -1,45 +1,45 @@
 import { get, post } from '@/api/client/client';
 import { API_URL } from '@/config';
 
+beforeEach(() => {
+  vi.stubGlobal('fetch', vi.fn());
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 describe('client', () => {
-  beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn());
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('GET', async () => {
     // Arrange
     const endpoint = '/test';
 
-    const mockResponse = { ok: true, data: 'test data' };
+    const response = { ok: true, data: 'test data' };
 
     (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
       ok: true,
-      json: async () => mockResponse
+      json: async () => response
     });
 
     // Act
     const result = await get<{ data: string }>(endpoint);
 
     // Assert
-    expect(fetch).toHaveBeenCalledWith(`${API_URL}${endpoint}`, {
+    expect(fetch).toHaveBeenNthCalledWith(1, `${API_URL}${endpoint}`, {
       credentials: 'include'
     });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(response);
   });
 
   it('GET with JSON error', async () => {
     // Arrange
-    const mockResponse = { message: 'Test message' };
+    const response = { message: 'Test message' };
 
     (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
       ok: false,
       status: 401,
-      json: async () => mockResponse
+      json: async () => response
     });
 
     // Act & Assert
@@ -65,27 +65,27 @@ describe('client', () => {
     // Arrange
     const body = { data: 'test body data' };
 
-    const mockResponse = { data: 'test response data' };
+    const response = { data: 'test response data' };
 
     const endpoint = '/test';
 
     (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
       ok: true,
-      json: async () => mockResponse
+      json: async () => response
     });
 
     // Act
-    const result = await post<typeof mockResponse, typeof body>(endpoint, body);
+    const result = await post<typeof response, typeof body>(endpoint, body);
 
     // Assert
-    expect(fetch).toHaveBeenCalledWith(`${API_URL}${endpoint}`, {
+    expect(fetch).toHaveBeenNthCalledWith(1, `${API_URL}${endpoint}`, {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' }
     });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(response);
   });
 
   it('POST with JSON error', async () => {
