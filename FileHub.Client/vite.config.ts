@@ -1,21 +1,26 @@
-import tailwindcss from '@tailwindcss/vite';
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
-import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+
+import type { UserConfigExport } from 'vitest/config';
 
 export default defineConfig({
-    plugins: [sveltekit(), tailwindcss()],
-    server: {
-        host: '0.0.0.0',
-        port: 3001,
-        https: isDevelopment ? {
-            key: readFileSync('../certs/key.pem'),
-            cert: readFileSync('../certs/cert.pem')
-        } : undefined
-    },
-    build: {
-        target: 'esnext'
+  plugins: [react()],
+  server: {
+    port: 3001
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+      '@styles': resolve(__dirname, 'src/styles')
     }
-});
+  },
+  test: {
+    globals: true,
+    isolate: true,
+    environment: 'jsdom',
+    setupFiles: './setup_vitest.ts',
+    css: true
+  }
+} as UserConfigExport);

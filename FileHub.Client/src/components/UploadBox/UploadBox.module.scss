@@ -1,0 +1,230 @@
+@use '@/styles/colors';
+
+.container {
+  align-items: center;
+}
+
+.upload_box_container {
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  max-width: 25rem;
+  padding: 1.5rem 1.5rem 0.1rem;
+  width: 100%;
+
+  background-color: colors.$component-bg;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 10%),
+    0 1px 2px -1px rgb(0 0 0 / 10%);
+}
+
+.title {
+  margin-bottom: 1.5rem;
+
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 2rem;
+}
+
+.upload_box {
+  position: relative;
+
+  border-color: colors.$input-border;
+  border-radius: 0.5rem;
+  border-style: dashed;
+  border-width: 2px;
+
+  margin-bottom: 1.5rem;
+
+  padding: 2rem;
+
+  text-align: center;
+
+  &:hover {
+    background-color: colors.$bg;
+  }
+
+  input {
+    position: absolute;
+
+    cursor: pointer;
+
+    opacity: 0;
+    inset: 0;
+  }
+
+  div {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  p {
+    color: colors.$zinc-400;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+.upload_icon {
+  color: colors.$zinc-400;
+}
+
+.selected_file_container {
+  align-items: center;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+
+  background-color: colors.$zinc-100;
+}
+
+.selected_file_card {
+  align-items: center;
+  display: flex;
+}
+
+.file_icon {
+  margin-right: 0.75rem;
+
+  color: colors.$secondary-btn-text;
+}
+
+.file_name {
+  margin: 0.25rem;
+
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+.file_size {
+  margin: 0.25rem;
+
+  color: colors.$secondary-btn-text;
+
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.remove_file {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+
+  color: colors.$secondary-btn-text;
+
+  background-color: colors.$secondary-btn-bg;
+
+  &:hover {
+    background-color: colors.$secondary-btn-bg-hover;
+  }
+}
+
+.name_input_container {
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+
+  input {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    width: 100%;
+  }
+}
+
+.tags_box {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+
+  button {
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+
+    color: colors.$secondary-btn-text;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+
+    background-color: colors.$secondary-btn-bg;
+
+    &:hover {
+      background-color: #ffa2a2;
+    }
+  }
+}
+
+.tag_input_box {
+  display: flex;
+  margin-top: 1.5rem;
+
+  input {
+    padding: 0.5rem;
+    flex: 1;
+  }
+
+  button {
+    margin-left: 0.5rem;
+    padding: 0.4rem 0.5rem;
+
+    color: colors.$secondary-btn-text;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+
+    background-color: colors.$secondary-btn-bg;
+
+    &:hover {
+      background-color: colors.$secondary-btn-bg-hover;
+    }
+  }
+}
+
+.upload_btn {
+  align-items: center;
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  width: 100%;
+
+  color: colors.$primary-btn-text;
+
+  background-color: colors.$primary-btn-bg;
+
+  &:hover {
+    background-color: colors.$primary-btn-bg-hover;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &:hover {
+      background-color: colors.$primary-btn-bg-hover-disabled;
+    }
+  }
+}
+
+.upload_alert {
+  border-color: colors.$alert-success-border;
+  border-radius: 0.5rem;
+  border-style: solid;
+  border-width: 1px;
+  padding: 1rem 1.5rem;
+  width: 100%;
+
+  color: colors.$alert-success-text;
+
+  text-align: center;
+
+  background-color: colors.$alert-success-bg;
+}

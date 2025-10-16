@@ -1,0 +1,68 @@
+@use '@/styles/colors';
+
+.container {
+  border-radius: 0.25rem;
+  margin: 0.5rem;
+  max-width: 24rem;
+  overflow: hidden;
+  width: 100%;
+
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 10%),
+    0 4px 6px -2px rgb(0 0 0 / 5%);
+}
+
+.thumbnail_container {
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 4/3;
+}
+
+.name_container {
+  max-width: 100%;
+  overflow: hidden;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content_type_container {
+  max-width: 100%;
+  overflow: hidden;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  color: colors.$zinc-500;
+
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tags_container {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  flex-wrap: wrap;
+
+  span {
+    border-radius: 0.5rem;
+    max-width: 250px;
+    overflow: hidden;
+    padding: 0.25rem 0.5rem;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    background-color: colors.$zinc-200;
+  }
+}

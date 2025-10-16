@@ -33,6 +33,7 @@ services:
       - SeedUser__Password=${SEED_USER_PASSWORD}
       - RootUrl=${ROOT_URL}
       - Sqids__MinLength=${SQIDS_MIN_LENGTH}
+      - Sqids__Alphabet={$SQIDS_ALPHABET}
     volumes:
       - ./data:/app/data
       - ./files:/app/files

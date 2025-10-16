@@ -1,0 +1,51 @@
+@use '@/styles/colors';
+
+.grid_container {
+  padding-bottom: 5rem;
+  padding-right: 1rem;
+}
+
+.nav_button_container {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+
+  align-items: center;
+
+  display: flex;
+  justify-content: center;
+  margin: 2rem 1rem;
+}
+
+.nav_button {
+  display: flex;
+  padding: 0.25rem 0.5rem;
+
+  color: colors.$secondary-btn-text;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.page_buttons_container {
+  display: flex;
+  margin: 0.2rem;
+}
+
+.page_button {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 0.1rem;
+  padding: 0.25rem 0.5rem;
+  width: 2rem;
+
+  color: colors.$secondary-btn-text;
+}
+
+.current_page_button {
+  background-color: colors.$secondary-btn-bg-hover;
+}

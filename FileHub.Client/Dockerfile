@@ -17,14 +17,8 @@ FROM node:22-alpine AS runner
 
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN npm install --only=production && npm cache clean --force
-
-COPY --from=builder /app/build ./build
+RUN npm install -g serve
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 3001
-
-ENV NODE_ENV=production
-
-CMD ["node", "build"]
+CMD ["serve", "-s", "dist", "-l", "3001"]

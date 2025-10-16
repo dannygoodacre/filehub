@@ -1,0 +1,65 @@
+@use '@/styles/colors';
+
+.navbar {
+  position: relative;
+
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+
+  background-color: colors.$navbar-bg;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 10%),
+    0 1px 2px -1px rgb(0 0 0 / 10%);
+}
+
+.title {
+  color: colors.$navbar-title;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2.25rem;
+}
+
+.links {
+  left: 50%;
+  position: absolute;
+
+  align-items: center;
+
+  display: flex;
+  gap: 2rem;
+
+  transform: translateX(-50%);
+}
+
+.link {
+  color: colors.$navbar-link-text;
+
+  &:hover {
+    color: colors.$navbar-link-hover;
+  }
+}
+
+.username {
+  color: colors.$navbar-username;
+  font-weight: 600;
+}
+
+.right {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+
+  button {
+    padding: 0.25rem 0.5rem;
+
+    color: colors.$navbar-btn-text;
+
+    background-color: colors.$navbar-btn-bg;
+
+    &:hover {
+      background-color: colors.$navbar-btn-hover;
+    }
+  }
+}

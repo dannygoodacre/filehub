@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.login_box_container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}

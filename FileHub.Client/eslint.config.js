@@ -1,35 +1,59 @@
-import prettier from 'eslint-config-prettier';
-import js from '@eslint/js';
-import { includeIgnoreFile } from '@eslint/compat';
-import svelte from 'eslint-plugin-svelte';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import importPlugin from 'eslint-plugin-import';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import reactRefreshPlugin from 'eslint-plugin-react-refresh';
+import sortExportsPlugin from 'eslint-plugin-sort-exports';
 import globals from 'globals';
-import { fileURLToPath } from 'node:url';
-import ts from 'typescript-eslint';
 
-const gitignorePath = fileURLToPath(new URL('../.gitignore', import.meta.url));
-
-export default ts.config(
-    includeIgnoreFile(gitignorePath),
-    js.configs.recommended,
-    ...ts.configs.recommended,
-    ...svelte.configs['flat/recommended'],
-    prettier,
-    ...svelte.configs['flat/prettier'],
-    {
-        languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...globals.node
-            }
-        }
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: { jsx: true }
+      },
+      globals: globals.browser
     },
-    {
-        files: ['**/*.svelte'],
-
-        languageOptions: {
-            parserOptions: {
-                parser: ts.parser
-            }
+    plugins: {
+      import: importPlugin,
+      '@typescript-eslint': tsPlugin,
+      'react-hooks': reactHooksPlugin,
+      'react-refresh': reactRefreshPlugin,
+      'sort-exports': sortExportsPlugin
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'no-unused-vars': 'off',
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'object', 'type'],
+          pathGroups: [
+            { pattern: 'react', group: 'builtin', position: 'before' },
+            { pattern: 'src/**', group: 'internal', position: 'after' }
+          ],
+          pathGroupsExcludedImportTypes: ['react'],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true }
         }
+      ]
     }
-);
+  },
+  {
+    files: ['**/index.ts', '**/index.tsx'], // only index files
+    plugins: {
+      'sort-exports': sortExportsPlugin
+    },
+    rules: {
+      'sort-exports/sort-exports': ['error', { sortDir: 'asc' }]
+    }
+  }
+]);
